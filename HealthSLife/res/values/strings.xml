@@ -1,0 +1,14 @@
+<resources>
+
+    <string name="app_name">HealthSLife</string>
+    <string name="stepnumber">步数</string>
+    <string name="energy">能量消耗</string>
+    <string name="aqi">空气质量</string>
+    <string name="excellent">优</string>
+    <string name="good">良</string>
+    <string name="mild_pollution">轻度污染</string>
+    <string name="moderate_pollution">中度污染</string>
+    <string name="heavily_polluted">重度污染</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

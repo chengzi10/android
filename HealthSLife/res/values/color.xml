@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#FFFFFF</color>
+ <!-- 白色 -->
+    <color name="lightoranger">#F98731</color>
+ <!-- 亮橙色 -->
+    <color name="snow">#FAFAFA</color>
+ <!-- 雪色 -->
+    <color name="grav">#7F7F7F</color>
+ <!-- 灰色 -->
+    <color name="lime">#00CC00</color>
+ <!-- 闪光绿色 -->
+    <color name="steelblue">#3399CC</color>
+ <!-- 铁青色 -->
+    <color name="lightgreen">#00FF00</color>
+ <!-- 亮绿色 -->
+    <color name="yellow">#FFFF00</color>
+ <!-- 纯黄色 -->
+    <color name="orange">#FF9900</color>
+ <!-- 橙色 -->
+    <color name="red">#FF0000</color>
+ <!-- 红色 -->
+    <color name="purple">#9966CC</color>
+ <!-- 紫色 -->
+
+</resources>
