@@ -1,25 +1,22 @@
 package com.healthslife.map;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.http.util.EncodingUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -27,46 +24,20 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
-import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.healthslife.R;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Toast;
+public class MapService extends Activity {
 
-public class MapService extends Activity{
-	MapView mMapView = null; // µØÍ¼¶ÔÏó
-	LocationClient mLocClient; // ¶¨Î»¶ÔÏó
 	public MyLocationListenner myListener = new MyLocationListenner();
-	private LocationMode mCurrentMode; // µ±Ç°¶¨Î»
-	BitmapDescriptor mCurrentMarker; // Î»Í¼
-	BaiduMap mBaiduMap; // °Ù¶ÈµØÍ¼¶ÔÏó
-	List<LatLng> points_LatLng = new ArrayList<LatLng>(); // ×ø±êÊý×é
-	LatLng ll; // ¶¨Òå×ø±ê¶ÔÏó
-	LatLng newll; // ¶¨Òå×ø±ê¶ÔÏó
-	String city = null; // »ñÈ¡µ±Ç°ËùÔÚ³ÇÊÐ
-	boolean isFirstLoc = true;// ÊÇ·ñÊ×´Î¶¨Î»
-	// UIÏà¹Ø
-	Button viewButton;
-	Button drawButton;
-	String res = "";
-	int count = 0;
-	Iterator<HashMap<String, Object>> it ;
+	protected static List<LatLng> points_LatLng = new ArrayList<LatLng>();;   //The list of LatLng's points åæ ‡ç‚¹çš„é›†åˆ
+	private static boolean isFirstLoc = true;  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// ÔÚÊ¹ÓÃSDK¸÷×é¼þÖ®Ç°³õÊ¼»¯contextÐÅÏ¢£¬´«ÈëApplicationContext
-		// ×¢Òâ¸Ã·½·¨ÒªÔÙsetContentView·½·¨Ö®Ç°ÊµÏÖ
-		SDKInitializer.initialize(getApplicationContext());
+
+		SDKInitializer.initialize(getApplicationContext()); // åœ¨ä½¿ç”¨SDKå„ç»„ä»¶ä¹‹å‰åˆå§‹åŒ–contextä¿¡æ¯ï¼Œä¼ å…¥ApplicationContext
 		/*
 		 * forbid lock screen
 		 */
@@ -74,38 +45,41 @@ public class MapService extends Activity{
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.map_service);
 
-		viewButton = (Button) findViewById(R.id.button1);
-		drawButton = (Button) findViewById(R.id.button2);
-		// µØÍ¼³õÊ¼»¯
-		mMapView = (MapView) findViewById(R.id.bmapView);
-		mBaiduMap = mMapView.getMap();
-		// ¿ªÆô¶¨Î»Í¼²ã
-		mBaiduMap.setMyLocationEnabled(true);
+		Button viewButton = (Button) findViewById(R.id.button1);
+		Button drawButton = (Button) findViewById(R.id.button2);
+		/*
+		 * åœ°å›¾åˆå§‹åŒ–
+		 */
+		MapGlobalVariable.mMapView = (MapView) findViewById(R.id.bmapView);
+		MapGlobalVariable.mBaiduMap = MapGlobalVariable.mMapView.getMap();
 
-		// ¿ªÆô½»Í¨Í¼
-		mBaiduMap.setTrafficEnabled(true);
-		mBaiduMap.setMapStatus(MapStatusUpdateFactory
-				.newMapStatus(new MapStatus.Builder().zoom(17).build()));// ÉèÖÃËõ·Å¼¶±ð
-		// ¶¨Î»³õÊ¼»¯
-		mLocClient = new LocationClient(this);
-		mLocClient.registerLocationListener(myListener);
+		MapGlobalVariable.mBaiduMap.setMyLocationEnabled(true);// å¼€å¯å®šä½å›¾å±‚
+
+		MapGlobalVariable.mBaiduMap.setTrafficEnabled(true);// å¼€å¯äº¤é€šå›¾
+		MapGlobalVariable.mBaiduMap.setMapStatus(MapStatusUpdateFactory
+				.newMapStatus(new MapStatus.Builder().zoom(17).build()));// è®¾ç½®ç¼©æ”¾çº§åˆ«
+		/*
+		 * å®šä½åˆå§‹åŒ–
+		 */
+		MapGlobalVariable.mLocClient = new LocationClient(this);
+		MapGlobalVariable.mLocClient.registerLocationListener(myListener);
 		LocationClientOption option = new LocationClientOption();
-		option.setOpenGps(true);// ´ò¿ªgps
-		option.setIsNeedAddress(true); // ·µ»ØµÄ¶¨Î»½á¹û°üº¬µØÖ·ÐÅÏ¢
-		option.setCoorType("bd09ll"); // ÉèÖÃ×ø±êÀàÐÍ
-		option.setScanSpan(1000); // ÉèÖÃ·¢Æð¶¨Î»ÇëÇóµÄ¼ä¸ôÊ±¼äÎª1000ms
-		option.setNeedDeviceDirect(true);// ·µ»ØµÄ¶¨Î»½á¹û°üº¬ÊÖ»ú»úÍ·µÄ·½Ïò
-		mLocClient.setLocOption(option);
-		mLocClient.start();
+		option.setOpenGps(true);// æ‰“å¼€gps
+		option.setIsNeedAddress(true); // è¿”å›žçš„å®šä½ç»“æžœåŒ…å«åœ°å€ä¿¡æ¯
+		option.setCoorType("bd09ll"); // è®¾ç½®åæ ‡ç±»åž‹
+		option.setScanSpan(1000); // è®¾ç½®å‘èµ·å®šä½è¯·æ±‚çš„é—´éš”æ—¶é—´ä¸º1000ms
+		option.setNeedDeviceDirect(true);// è¿”å›žçš„å®šä½ç»“æžœåŒ…å«æ‰‹æœºæœºå¤´çš„æ–¹å‘
+		MapGlobalVariable.mLocClient.setLocOption(option);
+		MapGlobalVariable.mLocClient.start();
 
 		viewButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// ÏÔÊ¾¾­Î³¶È
+				// æ˜¾ç¤ºç»çº¬åº¦
 				Toast.makeText(getApplicationContext(),
-						points_LatLng.toString() + city, Toast.LENGTH_LONG)
-						.show();
+						points_LatLng.toString(),
+						Toast.LENGTH_SHORT).show();
 
 			}
 
@@ -115,17 +89,15 @@ public class MapService extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				// »æÖÆ¹ì¼£
+				// ç»˜åˆ¶è½¨è¿¹
 				if (points_LatLng.size() >= 2) {
 					OverlayOptions ooPolyline = new PolylineOptions().width(8)
 							.color(Color.argb(255, 0, 102, 204))
 							.points(points_LatLng);
-					mBaiduMap.addOverlay(ooPolyline);
+					MapGlobalVariable.mBaiduMap.addOverlay(ooPolyline);
 				} else {
 					Toast.makeText(getApplicationContext(),
-							"Points isn't enough",
-							Toast.LENGTH_LONG).show();
-					// points_LatLng.size()
+							R.string.remind_sports, Toast.LENGTH_SHORT).show();
 					return;
 				}
 
@@ -136,53 +108,46 @@ public class MapService extends Activity{
 	}
 
 	/**
-	 * ¶¨Î»SDK¼àÌýº¯Êý
+	 * å®šä½SDKç›‘å¬å‡½æ•°
 	 */
 	public class MyLocationListenner implements BDLocationListener {
 
 		int i = 0;// record the LatLng's location
-
+		 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
-			// map view Ïú»Ùºó²»ÔÚ´¦ÀíÐÂ½ÓÊÕµÄÎ»ÖÃ
-			if (location == null || mMapView == null)
+			// map view é”€æ¯åŽä¸åœ¨å¤„ç†æ–°æŽ¥æ”¶çš„ä½ç½®
+			if (location == null || MapGlobalVariable.mMapView == null)
 				return;
 			MyLocationData locData = new MyLocationData.Builder()
 					.accuracy(location.getRadius())
-					// ´Ë´¦ÉèÖÃ¿ª·¢Õß»ñÈ¡µ½µÄ·½ÏòÐÅÏ¢£¬Ë³Ê±Õë0-360
+					// æ­¤å¤„è®¾ç½®å¼€å‘è€…èŽ·å–åˆ°çš„æ–¹å‘ä¿¡æ¯ï¼Œé¡ºæ—¶é’ˆ0-360
 					.direction(100).latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
-			//city = location.getCity();
-			mBaiduMap.setMyLocationData(locData);
+			MapGlobalVariable.mBaiduMap.setMyLocationData(locData);
 			if (isFirstLoc) {
 				isFirstLoc = false;
-				ll = new LatLng(location.getLatitude(), location.getLongitude());
-				city = location.getCity();
-				points_LatLng.add(i++, ll);
-				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-				mBaiduMap.animateMapStatus(u);
+				MapGlobalVariable.ll = new LatLng(location.getLatitude(),
+						location.getLongitude());
+
+				points_LatLng.add(i++, MapGlobalVariable.ll);
+				MapStatusUpdate u = MapStatusUpdateFactory
+						.newLatLng(MapGlobalVariable.ll);
+				MapGlobalVariable.mBaiduMap.animateMapStatus(u);
 			} else {
 
-				newll = new LatLng(location.getLatitude(),
+				MapGlobalVariable.newll = new LatLng(location.getLatitude(),
 						location.getLongitude());
-				city = location.getCity();
-				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(newll);
+				MapStatusUpdate u = MapStatusUpdateFactory
+						.newLatLng(MapGlobalVariable.newll);
 				double distance = DistanceUtil.getDistance(
-						points_LatLng.get(i - 1), newll);
+						points_LatLng.get(i - 1),
+						MapGlobalVariable.newll);
 				if (distance > 1 && distance < 10) {
-					points_LatLng.add(i++, newll);
-					Log.d("Sava_Data", "location is:" + newll);
-				} else {
-					Log.d("Don't Sava_Data", "location is in the form" + newll);
+					points_LatLng.add(i++,
+							MapGlobalVariable.newll);
 				}
-				count++;
-				Log.d("Count", count + " " + newll);
-				// OverlayOptions ooDot = new
-				// DotOptions().center(newll).radius(6)
-				// .color(0xAAFF0000);
-				// mBaiduMap.addOverlay(ooDot);
-
-				mBaiduMap.animateMapStatus(u);
+				MapGlobalVariable.mBaiduMap.animateMapStatus(u);
 			}
 
 		}
@@ -191,28 +156,27 @@ public class MapService extends Activity{
 		}
 	}
 
-	
 	@Override
 	protected void onResume() {
-		mMapView.onResume();
+		MapGlobalVariable.mMapView.onResume();
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
-		mMapView.onPause();
+		MapGlobalVariable.mMapView.onPause();
 		super.onPause();
 
 	}
 
 	@Override
 	protected void onDestroy() {
-		// ÍË³öÊ±Ïú»Ù¶¨Î»
-		mLocClient.stop();
-		// ¹Ø±Õ¶¨Î»Í¼²ã
-		mBaiduMap.setMyLocationEnabled(false);
-		mMapView.onDestroy();
-		mMapView = null;
+		// é€€å‡ºæ—¶é”€æ¯å®šä½
+		MapGlobalVariable.mLocClient.stop();
+		// å…³é—­å®šä½å›¾å±‚
+		MapGlobalVariable.mBaiduMap.setMyLocationEnabled(false);
+		MapGlobalVariable.mMapView.onDestroy();
+		MapGlobalVariable.mMapView = null;
 		super.onDestroy();
 	}
 

@@ -33,8 +33,8 @@ public class CircleBar extends View {
 	private float mPercent_y, stepnumber_y, Text_y;
 	private DecimalFormat fnum = new DecimalFormat("#.0"); // keep one decimal
 															// place
-	public int allModel; // The definition of global variables£º0:walk £¬ 1:energy
-							// £¬ 2:aqi
+	public int allModel; // The definition of global variables 0:walk  1:energy
+							// 2:aqi
 	private String modelText, modelTextView = getResources().getString(R.string.stepnumber);
 	public int level; // set the level of air quality
 
@@ -61,9 +61,9 @@ public class CircleBar extends View {
 
 		mColorWheelPaint = new Paint();
 		mColorWheelPaint.setColor(getResources().getColor(R.color.lightoranger));
-		mColorWheelPaint.setStyle(Paint.Style.STROKE);// ¿ÕĞÄ
-		mColorWheelPaint.setStrokeCap(Paint.Cap.ROUND);// Ô²½Ç»­±Ê
-		mColorWheelPaint.setAntiAlias(true);// È¥¾â³İ
+		mColorWheelPaint.setStyle(Paint.Style.STROKE);    
+		mColorWheelPaint.setStrokeCap(Paint.Cap.ROUND);   
+		mColorWheelPaint.setAntiAlias(true);    // è¿›åº¦æ¡è§’åº¦
 
 		mColorWheelPaintCentre = new Paint();
 		mColorWheelPaintCentre.setColor(getResources().getColor(R.color.snow));
@@ -130,13 +130,13 @@ public class CircleBar extends View {
 		int min = Math.min(width, height);// get View's length of the shortest
 											// edge
 		setMeasuredDimension(min, min); // compel the view become a square which
-										// the shortest edgeÇ¿ÖÆ¸ÄViewÎªÒÔ×î¶Ì±ßÎª³¤¶ÈµÄÕı·½ĞÎ
-		circleStrokeWidth = Textscale(30, min);// Ô²»¡µÄ¿í¶È
-		pressExtraStrokeWidth = Textscale(2, min);// Ô²»¡Àë¾ØĞÎµÄ¾àÀë
+										// the shortest 
+		circleStrokeWidth = Textscale(30, min);   
+		pressExtraStrokeWidth = Textscale(2, min);
 		mColorWheelRectangle.set(circleStrokeWidth + pressExtraStrokeWidth,
 				circleStrokeWidth + pressExtraStrokeWidth, min
 						- circleStrokeWidth - pressExtraStrokeWidth, min
-						- circleStrokeWidth - pressExtraStrokeWidth);// ÉèÖÃ¾ØĞÎ
+						- circleStrokeWidth - pressExtraStrokeWidth);
 		mTextP.setTextSize(Textscale(80, min));
 		mTextnum.setTextSize(Textscale(150, min));
 		mTextch.setTextSize(Textscale(50, min));
@@ -148,11 +148,11 @@ public class CircleBar extends View {
 		mDefaultWheelPaint
 				.setStrokeWidth(circleStrokeWidth - Textscale(2, min));
 		mDefaultWheelPaint.setShadowLayer(Textscale(10, min), 0, 0,
-				getResources().getColor(R.color.grav));  // ÉèÖÃÒõÓ° set shadow
+				getResources().getColor(R.color.grav));  
 	}
 
 	/**
-	 * ½ø¶ÈÌõ¶¯»­
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @author Administrator
 	 * 
@@ -163,29 +163,29 @@ public class CircleBar extends View {
 		}
 
 		/**
-		 * Ã¿´ÎÏµÍ³µ÷ÓÃÕâ¸ö·½·¨Ê±£¬ ¸Ä±ämSweepAnglePer£¬mPercent£¬stepnumbernowµÄÖµ£¬
-		 * È»ºóµ÷ÓÃpostInvalidate()²»Í£µÄ»æÖÆview¡£
+		 * Ã¿ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ ï¿½Ä±ï¿½mSweepAnglePerï¿½ï¿½mPercentï¿½ï¿½stepnumbernowï¿½ï¿½Öµï¿½ï¿½
+		 * È»ï¿½ï¿½ï¿½ï¿½ï¿½postInvalidate()ï¿½ï¿½Í£ï¿½Ä»ï¿½ï¿½ï¿½viewï¿½ï¿½
 		 */
 		@Override
 		protected void applyTransformation(float interpolatedTime,
 				Transformation t) {
 			super.applyTransformation(interpolatedTime, t);
-			// Ö»ÓĞ²½ĞĞÄ£Ê½ĞèÒª¼ÆËã°Ù·Ö±È
+			// Ö»ï¿½Ğ²ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ù·Ö±ï¿½
 			if (interpolatedTime < 1.0f && 2 != allModel) {
 				mPercent = Float.parseFloat(fnum.format(interpolatedTime
-						* stepnumber * 100f / setAim));// ½«¸¡µãÖµËÄÉáÎåÈë±£ÁôÒ»Î»Ğ¡Êı
+						* stepnumber * 100f / setAim));// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë±£ï¿½ï¿½Ò»Î»Ğ¡ï¿½ï¿½
 				mSweepAnglePer = interpolatedTime * stepnumber * 360
-						/ setAim;        //ÉèÖÃ½ø¶ÈÌõ
+						/ setAim;        //ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½
 				stepnumbernow = (int) (interpolatedTime * stepnumber);
 				modelTextView = modelText;
 			} else if(2 != allModel){
 				mPercent = Float.parseFloat(fnum.format(stepnumber * 100f
-						/ setAim));// ½«¸¡µãÖµËÄÉáÎåÈë±£ÁôÒ»Î»Ğ¡Êı
-				mSweepAnglePer = stepnumber * 360 / setAim;  //ÉèÖÃ½ø¶ÈÌõ
+						/ setAim));// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë±£ï¿½ï¿½Ò»Î»Ğ¡ï¿½ï¿½
+				mSweepAnglePer = stepnumber * 360 / setAim;  //ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½
 				stepnumbernow = stepnumber;
 				modelTextView = modelText;
 			} else if(2 == allModel) {
-				mSweepAnglePer = 360;    //¿ÕÆøÖÊÁ¿µÄ½ø¶ÈÌõÉèÖÃÈ«Âú
+				mSweepAnglePer = 360;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½
 				stepnumbernow = stepnumber;
 				modelTextView = modelText;
 			}
@@ -195,7 +195,7 @@ public class CircleBar extends View {
 	}
 
 	/**
-	 * ¸ù¾İ¿Ø¼şµÄ´óĞ¡¸Ä±ä¾ø¶ÔÎ»ÖÃµÄ±ÈÀı
+	 * ï¿½ï¿½ï¿½İ¿Ø¼ï¿½ï¿½Ä´ï¿½Ğ¡ï¿½Ä±ï¿½ï¿½ï¿½ï¿½Î»ï¿½ÃµÄ±ï¿½ï¿½ï¿½
 	 * 
 	 * @param n
 	 * @param m
@@ -206,8 +206,8 @@ public class CircleBar extends View {
 	}
 
 	/*
-	 * ¸ü¸ÄÏÔÊ¾Ä£Ê½£º²½ĞĞ¡¢ÄÜÁ¿ÏûºÄ¡¢¿ÕÆøÖÊÁ¿ ´«µİ²»Í¬Ä£Ê½µÄ²ÎÊı£º²½ĞĞ£ºÊµÊ±²½Êı+ÉèÖÃµÄÄ¿±ê²½Êı ÄÜÁ¿ÏûºÄ£ºÊµÊ±ÄÜÁ¿ÏûºÄ+ÉèÖÃµÄÄ¿±ê
-	 * ¿ÕÆøÖÊÁ¿£ºÊµÊ±¿ÕÆøÖÊÁ¿²ÎÊı+¿ÕÆøÖÊÁ¿
+	 * æ›´æ”¹æ˜¾ç¤ºæ¨¡å¼ï¼šæ­¥è¡Œã€èƒ½é‡æ¶ˆè€—ã€ç©ºæ°”è´¨é‡ ä¼ é€’ä¸åŒæ¨¡å¼çš„å‚æ•°ï¼šæ­¥è¡Œï¼šå®æ—¶æ­¥æ•°+è®¾ç½®çš„ç›®æ ‡æ­¥æ•° èƒ½é‡æ¶ˆè€—ï¼šå®æ—¶èƒ½é‡æ¶ˆè€—+è®¾ç½®çš„ç›®æ ‡
+	 * ç©ºæ°”è´¨é‡ï¼šå®æ—¶ç©ºæ°”è´¨é‡å‚æ•°+ç©ºæ°”è´¨é‡
 	 */
 	public void update(int stepnumber, int time, int model , int aim) {
 		this.stepnumber = stepnumber;
@@ -215,17 +215,17 @@ public class CircleBar extends View {
 		this.setAim = aim;
 		switch (model) {
 		case 0:
-			this.modelText = "²½Êı";
-			setColor(getResources().getColor(R.color.lime));        //ÉÁ¹âÂÌÉ« 
+			this.modelText = getResources().getString(R.string.stepnumber);//"æ­¥æ•°";
+			setColor(getResources().getColor(R.color.lime));       
 			mTextP.setColor(getResources().getColor(R.color.lime));
 			break;
 		case 1:
-			this.modelText  = "ÄÜÁ¿ÏûºÄ";
-			setColor(getResources().getColor(R.color.steelblue));     //ÌúÇàÉ«
+			this.modelText  = getResources().getString(R.string.energy);  //èƒ½é‡æ¶ˆè€—
+			setColor(getResources().getColor(R.color.steelblue));    
 			mTextP.setColor(getResources().getColor(R.color.steelblue));
 			break;
 		case 2:
-			this.modelText = "¿ÕÆøÖÊÁ¿";
+			this.modelText = getResources().getString(R.string.aqi);  //ç©ºæ°”è´¨é‡æŒ‡æ•°
 			break;
 		}
 		anim.setDuration(time);
@@ -233,7 +233,7 @@ public class CircleBar extends View {
 	}
 
 	/**
-	 * ÉèÖÃ½ø¶ÈÌõÑÕÉ«
+	 * è®¾ç½®è¿›åº¦æ¡é¢œè‰²
 	 * 
 	 * @param red
 	 * @param green
@@ -244,53 +244,53 @@ public class CircleBar extends View {
 	}
 
 	/**
-	 * ÉèÖÃ¶¯»­Ê±¼ä
+	 * è®¾ç½®è¿›åº¦æ¡åŠ¨ç”»æ—¶é—´
 	 * 
 	 * @param time
 	 */
 	public void setAnimationTime(int time) {
-		anim.setDuration(time * stepnumber / setAim);// °´ÕÕ±ÈÀıÉèÖÃ¶¯»­Ö´ĞĞÊ±¼ä
+		anim.setDuration(time * stepnumber / setAim);// æŒ‰ç…§æ¯”ä¾‹è®¾ç½®åŠ¨ç”»æ‰§è¡Œæ—¶é—´
 	}
 	
 	/*
-	 * ÉèÖÃ¿ÕÆøÖÊÁ¿¼¶±ğ
+	 * è®¾ç½®ç©ºæ°”è´¨é‡çº§åˆ«
 	 */
 	public String setAirLevel() {
 		level = stepnumber / 50;
 		String airQuality;
 		switch (level) {
 		case 0:
-			airQuality = "ÓÅ";
+			airQuality = getResources().getString(R.string.excellent);  //ä¼˜
 			setColor(getResources().getColor(R.color.lightgreen));
 			mTextP.setColor(getResources().getColor(R.color.lightgreen));
 			break;
 		case 1:
-			airQuality = "Á¼";
+			airQuality = getResources().getString(R.string.good);   //è‰¯å¥½
 			setColor(getResources().getColor(R.color.yellow));
 			mTextP.setColor(getResources().getColor(R.color.yellow));
 			break;
 		case 2:
-			airQuality = "Çá¶ÈÎÛÈ¾";
+			airQuality = getResources().getString(R.string.mild_pollution);  //è½»åº¦æ±¡æŸ“
 			setColor(getResources().getColor(R.color.lightoranger));
 			mTextP.setColor(getResources().getColor(R.color.lightoranger));
 			break;
 		case 3:
-			airQuality = "Çá¶ÈÎÛÈ¾";
+			airQuality = getResources().getString(R.string.mild_pollution);  //è½»åº¦æ±¡æŸ“
 			setColor(getResources().getColor(R.color.lightoranger));
 			mTextP.setColor(getResources().getColor(R.color.lightoranger));
 			break;
 		case 4:
-			airQuality = "ÖĞ¶ÈÎÛÈ¾";
+			airQuality = getResources().getString(R.string.moderate_pollution);  //ä¸­åº¦æ±¡æŸ“
 			setColor(getResources().getColor(R.color.red));
 			mTextP.setColor(getResources().getColor(R.color.red));
 			break;
 		case 5:
-			airQuality = "ÖĞ¶ÈÎÛÈ¾";
+			airQuality = getResources().getString(R.string.moderate_pollution);  //ä¸­åº¦æ±¡æŸ“
 			setColor(getResources().getColor(R.color.red));
 			mTextP.setColor(getResources().getColor(R.color.red));
 			break;
 		default:
-			airQuality = "ÖØ¶ÈÎÛÈ¾";
+			airQuality = getResources().getString(R.string.heavily_polluted);  //é‡åº¦æ±¡æŸ“
 			setColor(getResources().getColor(R.color.purple));
 			mTextP.setColor(getResources().getColor(R.color.purple));
 		}

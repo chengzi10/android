@@ -5,7 +5,10 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,24 +17,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.healthslife.R;
+import com.isnc.facesdk.SuperID;
+import com.isnc.facesdk.common.Cache;
+import com.isnc.facesdk.common.SDKConfig;
 
 public class Login extends Activity {
-	private TextView textView;
-	private EditText editText_name;
-	private EditText editText_password;
-	String name = null;
-	String passwd = null;
-	String result; // the data of return
-
+	
+	private Context context;
 	/*
-	 * ×ÓÏß³Ì
+	 * The thread of login
 	 */
+	@SuppressLint("HandlerLeak")
 	private Handler handle = new Handler() {
 
 		@Override
@@ -41,8 +42,17 @@ public class Login extends Activity {
 			Log.d("handle", "into handle");
 			String result = msg.obj.toString();
 			Log.d("TAG", result);
-			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
-					.show();
+			
+			if (result.equals("success")) {
+				Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_SHORT)
+				.show();
+				Intent intent = new Intent();
+				intent.setClass(Login.this, Aty_UserCenter.class);
+				startActivity(intent);
+			}else {
+				Toast.makeText(getApplicationContext(), R.string.login_fail, Toast.LENGTH_SHORT)
+				.show();
+			}
 		}
 
 	};
@@ -50,38 +60,40 @@ public class Login extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);
-
-		editText_name = (EditText) findViewById(R.id.username);
-		editText_password = (EditText) findViewById(R.id.password);
-		Button login_btn = (Button) findViewById(R.id.login_btn);
-		textView = (TextView) findViewById(R.id.notice);
-
+		setContentView(R.layout.aty_login);
+		context = this;
+		/*
+		 * normal login style
+		 */
+		final EditText editText_name = (EditText) findViewById(R.id.normal_login_username);
+		final EditText editText_password = (EditText) findViewById(R.id.normal_login_password);
+		Button login_btn = (Button) findViewById(R.id.normal_login_btn);
 		login_btn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				name = editText_name.getText().toString();
-				passwd = editText_password.getText().toString();
-				if ("".equals(name) || "".equals(passwd)) {
-					YoYo.with(Techniques.Shake).duration(700).playOn(
-							findViewById(R.id.edit_area));
+				LoginRegisterGlobalVariable.login_name = editText_name.getText().toString();
+				LoginRegisterGlobalVariable.login_passwd = editText_password.getText().toString();
+				/**
+				 * åˆ¤æ–­ç”¨æˆ·è¾“å…¥æ˜¯å¦ä¸ºç©º
+				 */
+				if ("".equals(LoginRegisterGlobalVariable.login_name) || "".equals(LoginRegisterGlobalVariable.login_passwd)) {
+					YoYo.with(Techniques.Shake).duration(700)
+							.playOn(findViewById(R.id.input_area));
 					Toast.makeText(getApplicationContext(),
 							"name or password is null!", Toast.LENGTH_SHORT)
 							.show();
 					return;
 				}
-				Log.d("Thread", "out of Thread");
 				new Thread(new Runnable() {
-
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
 						Log.d("Thread", "into Thread");
-						getInfo(name, passwd);
+						getInfo(LoginRegisterGlobalVariable.login_name, LoginRegisterGlobalVariable.login_passwd);
 						Message msg = handle.obtainMessage();
-						msg.obj = result;
+						msg.obj = LoginRegisterGlobalVariable.login_result;
 						handle.sendMessage(msg);
 					}
 
@@ -92,37 +104,89 @@ public class Login extends Activity {
 	}
 
 	public void getInfo(String name, String passwd) {
-		String nameSpace = "http://registerlogin.server.healthSLife.com"; // ÉèÖÃÃüÃû¿Õ¼ä
-		String methodName = "loginCheck"; // µ÷ÓÃµÄ·½·¨Ãû³Æ
-		String endPoint = "http://10.6.11.17:8080/axis2/services/LoginService"; // EndPoint
-																				// //Ä£ÄâÆ÷ÊÇ10.0.2.2£»Õæ»úÊÇµçÄÔµÄIPµØÖ·
+		String nameSpace = "http://registerlogin.server.healthSLife.com"; // The namespace of login service
+		String methodName = "loginCheck"; // login method name
+		String endPoint = "http://10.6.12.88:8080/axis2/services/LoginService"; // EndPoint
+																				// //emulator should use 10.0.2.2
 		String soapAction = "http://registerlogin.server.healthSLife.com/loginCheck"; // SOAP
 																						// Action
 
-		// Ö¸¶¨WebServiceµÄÃüÃû¿Õ¼äºÍµ÷ÓÃµÄ·½·¨Ãû
+		// æŒ‡å®šWebServiceçš„å‘½åç©ºé—´å’Œè°ƒç”¨çš„æ–¹æ³•å
 		SoapObject rpc = new SoapObject(nameSpace, methodName);
-		// ÉèÖÃµ÷ÓÃwebService½Ó¿ÚĞèÒª´«ÈëµÄ²ÎÊı
+		// è®¾ç½®è°ƒç”¨webServiceæ¥å£éœ€è¦ä¼ å…¥çš„å‚æ•°
 		rpc.addProperty("name", name);
 		rpc.addProperty("passwd", passwd);
 
-		// Éú³Éµ÷ÓÃWebService·½·¨µÄSOAPÇëÇóĞÅÏ¢£¬²¢Ö¸¶¨SOAPµÄ°æ±¾
+		// ç”Ÿæˆè°ƒç”¨WebServiceæ–¹æ³•çš„SOAPè¯·æ±‚ä¿¡æ¯ï¼Œå¹¶æŒ‡å®šSOAPçš„ç‰ˆæœ¬
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER10);
 		envelope.bodyOut = rpc;
 
 		HttpTransportSE transport = new HttpTransportSE(endPoint);
 		try {
-			// µ÷ÓÃWebService
+			// è°ƒç”¨WebService
 			transport.call(soapAction, envelope);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		// »ñÈ¡·µ»ØµÄÊı¾İ
+		// è·å–è¿”å›çš„æ•°æ®
 		SoapObject object = (SoapObject) envelope.bodyIn;
-		// »ñÈ¡·µ»ØµÄ½á¹û
-		result = object.getProperty(0).toString();
+		// è·å–è¿”å›çš„ç»“æœ
+		LoginRegisterGlobalVariable.login_result = object.getProperty(0).toString();
 
 	}
+
+	// äººè„¸ç™»å½•
+	public void btn_superidlogin(View v) {
+
+		SuperID.faceLogin(this);
+	}
+
+	// æ¥å£è¿”å›
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		switch (resultCode) {
+		// æˆæƒæˆåŠŸ
+		case SDKConfig.AUTH_SUCCESS:
+			System.out.println(Cache.getCached(context, SDKConfig.KEY_APPINFO));
+			System.err.println("dddbb");
+			Intent intent = new Intent(this, Aty_UserCenter.class);
+			startActivity(intent);
+			finish();
+			break;
+		// å–æ¶ˆæˆæƒ
+		case SDKConfig.AUTH_BACK:
+
+			break;
+		// æ‰¾ä¸åˆ°è¯¥ç”¨æˆ·
+		case SDKConfig.USER_NOTFOUND:
+
+			break;
+		// ç™»å½•æˆåŠŸ
+		case SDKConfig.LOGINSUCCESS:
+			System.out.println(Cache.getCached(context, SDKConfig.KEY_APPINFO));
+			Intent i = new Intent(this, Aty_UserCenter.class);
+			startActivity(i);
+			finish();
+			break;
+		// ç™»å½•å¤±è´¥
+		case SDKConfig.LOGINFAIL:
+			break;
+		// ç½‘ç»œæœ‰è¯¯
+		case SDKConfig.NETWORKFAIL:
+			break;
+		// ä¸€ç™»SDKç‰ˆæœ¬è¿‡ä½
+		case SDKConfig.SDKVERSIONEXPIRED:
+			break;
+		default:
+			break;
+		}
+
+	}
+	
+	
 
 }

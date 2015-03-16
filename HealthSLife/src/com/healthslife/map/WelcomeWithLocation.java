@@ -1,166 +1,92 @@
 package com.healthslife.map;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.PolylineOptions;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.utils.DistanceUtil;
 import com.healthslife.R;
 import com.healthslife.health.HealthServiceActivity;
 
 public class WelcomeWithLocation extends Activity {
-	MapView mMapView = null; // µØÍ¼¶ÔÏó
-	LocationClient mLocClient; // ¶¨Î»¶ÔÏó
-	public MyLocationListenner myListener = new MyLocationListenner();
-	BitmapDescriptor mCurrentMarker; // Î»Í¼
-	BaiduMap mBaiduMap; // °Ù¶ÈµØÍ¼¶ÔÏó
-	List<LatLng> points_LatLng = new ArrayList<LatLng>(); // ×ø±êÊı×é
-	LatLng ll; // ¶¨Òå×ø±ê¶ÔÏó
-	LatLng newll; // ¶¨Òå×ø±ê¶ÔÏó
-	public static String city = null; // »ñÈ¡µ±Ç°ËùÔÚ³ÇÊĞ
-	boolean isFirstLoc = true;// ÊÇ·ñÊ×´Î¶¨Î»
-	boolean isDisplayMap = false; // ÊÇ·ñÏÔÊ¾µØÍ¼
-	// UIÏà¹Ø
-	Button viewButton;
-	Button drawButton;
-	String res = "";
-	int count = 0;
-	Iterator<HashMap<String, Object>> it;
+	private MyLocationListenner myListener = new MyLocationListenner();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// ÔÚÊ¹ÓÃSDK¸÷×é¼şÖ®Ç°³õÊ¼»¯contextĞÅÏ¢£¬´«ÈëApplicationContext
-		// ×¢Òâ¸Ã·½·¨ÒªÔÙsetContentView·½·¨Ö®Ç°ÊµÏÖ
-		SDKInitializer.initialize(getApplicationContext());
+
+		SDKInitializer.initialize(getApplicationContext()); // åœ¨ä½¿ç”¨SDKå„ç»„ä»¶ä¹‹å‰åˆå§‹åŒ–contextä¿¡æ¯ï¼Œä¼ å…¥ApplicationContext
 		/*
-		 * forbid lock screen
+		 * forbid lock screen ç¦æ­¢é”å±
 		 */
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.location_service);
 
-		mMapView = (MapView) findViewById(R.id.bmapView_gone);
-		
-		mBaiduMap = mMapView.getMap();
-		// ¿ªÆô¶¨Î»Í¼²ã
-		mBaiduMap.setMyLocationEnabled(true);
-
-		// ¿ªÆô½»Í¨Í¼
-//		mBaiduMap.setTrafficEnabled(true);
-//		mBaiduMap.setMapStatus(MapStatusUpdateFactory
-//				.newMapStatus(new MapStatus.Builder().zoom(17).build()));// ÉèÖÃËõ·Å¼¶±ğ
-		// ¶¨Î»³õÊ¼»¯
-		mLocClient = new LocationClient(WelcomeWithLocation.this);
-		mLocClient.registerLocationListener(myListener);
+		MapGlobalVariable.mMapView = (MapView) findViewById(R.id.bmapView_gone); // Initialize
+																				// Map
+																				// åˆå§‹åŒ–åœ°å›¾
+		MapGlobalVariable.mBaiduMap = MapGlobalVariable.mMapView.getMap();
+		MapGlobalVariable.mBaiduMap.setMyLocationEnabled(true); // Open location's
+																// layer å¼€å¯å®šä½å›¾å±‚
+		MapGlobalVariable.mLocClient = new LocationClient(WelcomeWithLocation.this); // Initialize
+																					// location
+																					// å®šä½åˆå§‹åŒ–
+		MapGlobalVariable.mLocClient.registerLocationListener(myListener);
 		LocationClientOption option = new LocationClientOption();
-		option.setOpenGps(true);// ´ò¿ªgps
-		option.setIsNeedAddress(true); // ·µ»ØµÄ¶¨Î»½á¹û°üº¬µØÖ·ĞÅÏ¢
-		option.setCoorType("bd09ll"); // ÉèÖÃ×ø±êÀàĞÍ
-		option.setScanSpan(1000); // ÉèÖÃ·¢Æğ¶¨Î»ÇëÇóµÄ¼ä¸ôÊ±¼äÎª1000ms
-		option.setNeedDeviceDirect(true);// ·µ»ØµÄ¶¨Î»½á¹û°üº¬ÊÖ»ú»úÍ·µÄ·½Ïò
-		mLocClient.setLocOption(option);
-		mLocClient.start();
+		option.setOpenGps(true); // open gps æ‰“å¼€gps
+		option.setIsNeedAddress(true); // The data of return contain address
+		option.setCoorType("bd09ll"); // Set coordinate type è®¾ç½®åæ ‡ç±»å‹
+		option.setScanSpan(1000); // Location request time interval 1000ms
+									// è®¾ç½®å‘èµ·å®šä½è¯·æ±‚çš„æ—¶é—´é—´éš”ä¸º1000ms
+		MapGlobalVariable.mLocClient.setLocOption(option);
+		MapGlobalVariable.mLocClient.start();
 
-		if (isDisplayMap == false) {
-			// Ìø×ªÖÁ½¡¿µÄ£¿é
-			Timer timer = new Timer();
-			TimerTask task = new TimerTask() {
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
 
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					Intent toHealthService = new Intent();
-					Bundle cityBundle = new Bundle();
-					if (city == null) {
-						city = "error";
-					} 
-					cityBundle.putString("cityName", city);
-					toHealthService.putExtras(cityBundle);
-					toHealthService.setClass(WelcomeWithLocation.this,
-							HealthServiceActivity.class);
-					startActivity(toHealthService);
-					WelcomeWithLocation.this.finish();
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Intent toHealthService = new Intent();
+				Bundle cityBundle = new Bundle();
+				if (null == MapGlobalVariable.city) {
+					MapGlobalVariable.city = "error";
 				}
+				cityBundle.putString("cityName", MapGlobalVariable.city);
+				toHealthService.putExtras(cityBundle);
+				toHealthService.setClass(WelcomeWithLocation.this,
+						HealthServiceActivity.class);
+				startActivity(toHealthService);
+				WelcomeWithLocation.this.finish();
+			}
 
-			};
-			timer.schedule(task, 3000);
-		}
+		};
+		timer.schedule(task, 3000);
 	}
 
 	/**
-	 * ¶¨Î»SDK¼àÌıº¯Êı
+	 * Positioning monitor function å®šä½SDKç›‘å¬å‡½æ•°
 	 */
 	public class MyLocationListenner implements BDLocationListener {
 
-		int i = 0;// record the LatLng's location
-
 		@Override
 		public void onReceiveLocation(BDLocation location) {
-			// map view Ïú»Ùºó²»ÔÚ´¦ÀíĞÂ½ÓÊÕµÄÎ»ÖÃ
-			if (location == null || mMapView == null)
+			// map view é”€æ¯åä¸å†æ¥æ”¶æ–°çš„ä½ç½®
+			if (location == null || MapGlobalVariable.mMapView == null)
 				return;
-			MyLocationData locData = new MyLocationData.Builder()
-					.accuracy(location.getRadius())
-					// ´Ë´¦ÉèÖÃ¿ª·¢Õß»ñÈ¡µ½µÄ·½ÏòĞÅÏ¢£¬Ë³Ê±Õë0-360
-					.direction(100).latitude(location.getLatitude())
-					.longitude(location.getLongitude()).build();
-			// city = location.getCity();
-			mBaiduMap.setMyLocationData(locData);
-			if (isFirstLoc) {
-				isFirstLoc = false;
-				ll = new LatLng(location.getLatitude(), location.getLongitude());
-				city = location.getCity();
-				points_LatLng.add(i++, ll);
-				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-				mBaiduMap.animateMapStatus(u);
-			} else {
-
-				newll = new LatLng(location.getLatitude(),
-						location.getLongitude());
-				city = location.getCity();
-				MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(newll);
-				double distance = DistanceUtil.getDistance(
-						points_LatLng.get(i - 1), newll);
-				if (distance > 1 && distance < 10) {
-					points_LatLng.add(i++, newll);
-					Log.d("Sava_Data", "location is:" + newll);
-				} else {
-					Log.d("Don't Sava_Data", "location is in the form" + newll);
-				}
-
-				mBaiduMap.animateMapStatus(u);
+			if (MapGlobalVariable.isFirstLoc) {
+				MapGlobalVariable.isFirstLoc = false;
+				MapGlobalVariable.city = location.getCity();
 			}
-
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
@@ -169,25 +95,24 @@ public class WelcomeWithLocation extends Activity {
 
 	@Override
 	protected void onResume() {
-		mMapView.onResume();
+		MapGlobalVariable.mMapView.onResume();
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
-		mMapView.onPause();
+		MapGlobalVariable.mMapView.onPause();
 		super.onPause();
-
 	}
 
 	@Override
 	protected void onDestroy() {
-		// ÍË³öÊ±Ïú»Ù¶¨Î»
-		mLocClient.stop();
-		// ¹Ø±Õ¶¨Î»Í¼²ã
-		mBaiduMap.setMyLocationEnabled(false);
-		mMapView.onDestroy();
-		mMapView = null;
+		// é€€å‡ºæ—¶é”€æ¯å®šä½
+		MapGlobalVariable.mLocClient.stop();
+		// å…³é—­å®šä½å›¾å±‚
+		MapGlobalVariable.mBaiduMap.setMyLocationEnabled(false);
+		MapGlobalVariable.mMapView.onDestroy();
+		MapGlobalVariable.mMapView = null;
 		super.onDestroy();
 	}
 

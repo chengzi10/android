@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:text="@string/activity_xlcs_text" />
+    <!-- 显示文本，提示用户将手指置于摄像头前 -->
+
+    <SurfaceView
+        android:id="@+id/xlcs_preview"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp" />
+    <!-- 摄像头摄像用SurfaceView -->
+
+    <TextView
+        android:id="@+id/xlcs_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/xlcs_preview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp" />
+    <!-- 文本用于显示监测结果 -->
+
+    <View
+        android:id="@+id/xlcs_image"
+        android:layout_width="20dip"
+        android:layout_height="20dip"
+        android:layout_alignBottom="@+id/xlcs_text"
+        android:layout_toLeftOf="@+id/xlcs_preview" />
+    <!-- 分析图片用 -->
+
+    <Button
+        android:id="@+id/xlcs_button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/xlcs_text"
+        android:layout_centerHorizontal="true"
+        android:onClick="xlcs_save"
+        android:text="@string/activity_xlcs_button_save" />
+    <!-- 保存数据用button -->
+
+    <ListView
+        android:id="@+id/xlcs_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/xlcs_button_save"
+        android:layout_centerHorizontal="true" />
+    <!-- 显示数据 -->
+
+</RelativeLayout>

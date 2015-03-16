@@ -22,25 +22,20 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.healthslife.R;
 import com.healthslife.allinterface.CircleBar;
 import com.healthslife.allinterface.SlidingMenu;
+import com.healthslife.heartrate.XlcsActivity;
 import com.healthslife.map.MapService;
 
 public class HealthServiceActivity extends Activity {
 
-	private CircleBar circleBar;
-	private int model = 0; // Ä£Ê½±êÊ¶
-	private int newAqi = 0; // ¿ÕÆøÖÊÁ¿Ö¸ÊıAQI
-	private int value[] = { 1000, 90, 35 }; // ´«µİµÄ²ÎÊı
-	private int aim[] = { 5000, 200, 0 }; // Éè¶¨µÄÄ¿±êÖµ
-	String cityName = null;
-	private String url;
-	private Button map_btn;
-	private SlidingMenu mLeftMenu;
+	private int value[] = { 1000, 90, 35 }; // æ•°æ®æ”¶é›†æ¨¡å—ä¼ é€’çš„å‚æ•°
+	private int aim[] = { 5000, 200, 0 }; // è®¾ç½®æ¨¡å—ä¼ é€’çš„ç”¨æˆ·è®¾ç½®ç›®æ ‡
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,41 +44,49 @@ public class HealthServiceActivity extends Activity {
 		SDKInitializer.initialize(getApplicationContext());
 		setContentView(R.layout.health_service);
 
-		circleBar = (CircleBar) findViewById(R.id.circle_bar);
+		HealthGlobalVariable.circleBar = (CircleBar) findViewById(R.id.circle_bar);
 
-		circleBar.setOnClickListener(new OnClickListener() {
+		HealthGlobalVariable.circleBar
+				.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (2 == model) {
-					value[2] = newAqi;
-					if (0 == newAqi) {
-						Toast.makeText(getApplicationContext(), "ÍøÂçÁ¬½Ó´íÎó",
-								Toast.LENGTH_LONG).show();
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						if (2 == HealthGlobalVariable.model) {
+							value[2] = HealthGlobalVariable.newAqi;
+							if (0 == HealthGlobalVariable.newAqi) {
+								Toast.makeText(getApplicationContext(),
+										"äº²ï¼Œè·å–ç©ºæ°”è´¨é‡å¤±è´¥ï¼Œçœ‹çœ‹çª—å¤–å§", Toast.LENGTH_SHORT)
+										.show();
+							}
+						}
+						HealthGlobalVariable.circleBar.update(
+								value[HealthGlobalVariable.model], 500,
+								HealthGlobalVariable.model,
+								aim[HealthGlobalVariable.model]); // å°†å‚æ•°ä¼ é€’åˆ°Circlebarä¸­
+						if (HealthGlobalVariable.model > 1) {
+							HealthGlobalVariable.model = 0;
+						} else {
+							HealthGlobalVariable.model++;
+						}
 					}
-				}
-				circleBar.update(value[model], 500, model, aim[model]); // ½«²ÎÊı´«µİµ½CirclebarÖĞ
-				if (model > 1) {
-					model = 0;
-				} else {
-					model++;
-				}
-			}
 
-		});
-		mLeftMenu = (SlidingMenu) findViewById(R.id.id_menu);
-		// ´ÓµØÍ¼Ä£¿é´«µİµ±Ç°³ÇÊĞ
+				});
+		HealthGlobalVariable.mLeftMenu = (SlidingMenu) findViewById(R.id.id_menu);
+		/*
+		 * è·å–æ¬¢è¿ç•Œé¢ä¼ æ¥çš„åŸå¸‚åç§°
+		 */
 		Intent getCityName = getIntent();
 		Bundle bundle = getCityName.getExtras();
-		cityName = bundle.getString("cityName");
-		Toast.makeText(getApplicationContext(), "³ÇÊĞÃû" + cityName,
-				Toast.LENGTH_LONG).show();
-		// Ö´ĞĞÏß³Ì
+		HealthGlobalVariable.cityName = bundle.getString("cityName");
+		Toast.makeText(getApplicationContext(),
+				"æ‚¨ç°åœ¨ä½äº" + HealthGlobalVariable.cityName, Toast.LENGTH_SHORT)
+				.show();
+		// æ‰§è¡Œè·å–AQIçš„çº¿ç¨‹
 		CountAirQuality airQuality = new CountAirQuality();
 		airQuality.execute();
 
-		map_btn = (Button) findViewById(R.id.map_btn);
+		Button map_btn = (Button) findViewById(R.id.map_btn);
 		map_btn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -96,10 +99,46 @@ public class HealthServiceActivity extends Activity {
 			}
 
 		});
+
+		/*
+		 * è·³è½¬éŸ³ä¹æœåŠ¡
+		 */
+
+		TextView music_service = (TextView) findViewById(R.id.music_service);
+		music_service.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent music_intent = new Intent();
+				music_intent.setClass(HealthServiceActivity.this,
+						MapService.class);
+				startActivity(music_intent);
+			}
+
+		});
+
+		TextView heartTest_service = (TextView) findViewById(R.id.heartTest_service);
+		heartTest_service.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent heartTest_intent = new Intent();
+				heartTest_intent.setClass(HealthServiceActivity.this,
+						XlcsActivity.class);
+				startActivity(heartTest_intent);
+			}
+
+		});
+	}
+
+	public void map_btn(View v) {
+
 	}
 
 	public void toggleMenu(View view) {
-		mLeftMenu.toggle();
+		HealthGlobalVariable.mLeftMenu.toggle();
 	}
 
 	@Override
@@ -110,37 +149,38 @@ public class HealthServiceActivity extends Activity {
 	}
 
 	/*
-	 * ´´½¨Ïß³ÌÒì²½´¦Àí»ñÈ¡µÄ¿ÕÆøÖÊÁ¿
+	 * è·å–ç©ºæ°”è´¨é‡AQIçš„çº¿ç¨‹
 	 */
 
 	private class CountAirQuality extends AsyncTask<Void, Integer, Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			// ºóÌ¨Ê×ÏÈÍ¨¹ıµØÍ¼¶¨Î»µ½ËùÔÚ³ÇÊĞÈ»ºó¼ÆËãAQI
+			// æ ¹æ®åŸå¸‚å¯¹åº”çš„åŒºå·è·å–AQI
 			while (true) {
-				if (!cityName.equals("error")) {
-					String cityCode = null; // ³ÇÊĞ±àÂë
+				if (!HealthGlobalVariable.cityName.equals("error")) {
+					String cityCode = null; // åˆå§‹åŒ–åŸå¸‚åŒºå·
 					ArrayList<HashMap<String, Object>> list = null;
 					try {
-						list = Analysis(); // µÃµ½³ÇÊĞ¶ÔÓ¦±àÂëµÄÁĞ±í
+						list = Analysis(); // è§£æJSONæ•°æ®
 					} catch (JSONException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					cityCode = resultJson(list, cityName);
-					// »ñÈ¡AQIÖ¸ÊıµÄURL
+					cityCode = resultJson(list, HealthGlobalVariable.cityName);
+					// å°†æŸ¥è¯¢åˆ°çš„åŒºå·å¡«å……åˆ°URLä¸­
 					if (cityCode != null) {
 						Log.d("cityCode", cityCode);
-						url = "http://www.pm25.in/api/querys/pm2_5.json?city="
+						HealthGlobalVariable.url = "http://www.pm25.in/api/querys/pm2_5.json?city="
 								+ cityCode
 								+ "&token=5j1znBVAsnSf5xQyNQyq&stations=no";
 					}
 				}
-				if (AirQuality.getAqi(url) != null) {
-					newAqi = Integer.parseInt(AirQuality.getAqi(url));
+				if (AirQuality.getAqi(HealthGlobalVariable.url) != null) {
+					HealthGlobalVariable.newAqi = Integer.parseInt(AirQuality
+							.getAqi(HealthGlobalVariable.url));
 				}
-				if (newAqi != 0) {
+				if (HealthGlobalVariable.newAqi != 0) {
 					try {
 						Thread.sleep(3600000);
 					} catch (InterruptedException e) {
@@ -148,7 +188,6 @@ public class HealthServiceActivity extends Activity {
 						e.printStackTrace();
 					}
 				}
-				publishProgress(null);
 			}
 		}
 
@@ -161,7 +200,7 @@ public class HealthServiceActivity extends Activity {
 	}
 
 	/*
-	 * ´ÓÎÄ¼şÖĞ¶ÁÈ¡JSONÊı¾İµÄ½âÎö
+	 * è§£æJSONæ•°æ®
 	 * 
 	 * @see android.app.Activity#onResume()
 	 */
@@ -173,20 +212,14 @@ public class HealthServiceActivity extends Activity {
 		String fileName = "citycode.txt";
 		try {
 
-			// µÃµ½×ÊÔ´ÖĞµÄassetÊı¾İÁ÷
-			InputStream in = getResources().getAssets().open(fileName);
-
+			InputStream in = getResources().getAssets().open(fileName); // ä»assetsä¸‹çš„æ–‡ä»¶ä¸­è¯»å–æ•°æ®
 			int length = in.available();
 			byte[] buffer = new byte[length];
-
 			in.read(buffer);
 			in.close();
 			res = EncodingUtils.getString(buffer, "GB2312");
-
 		} catch (Exception e) {
-
 			e.printStackTrace();
-
 		}
 		JSONArray jsonArray = null;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
@@ -196,12 +229,10 @@ public class HealthServiceActivity extends Activity {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("city", jsonObject.getString("city"));
 			map.put("areaCode", jsonObject.getString("areaCode"));
-			list.add(map);
+			list.add(map); // å°†æ•°æ®ä¿å­˜åˆ°listä¸­
 
 		}
-
 		return list;
-
 	}
 
 	public String resultJson(ArrayList<HashMap<String, Object>> list,
@@ -234,7 +265,7 @@ public class HealthServiceActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		// ÍË³öÊ±Ïú»Ù¶¨Î»
+		// é€€å‡ºé”€æ¯
 		super.onDestroy();
 	}
 }

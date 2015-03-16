@@ -1,7 +1,6 @@
 package com.healthslife.health;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,10 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class AirQuality {
 	/*
-	 * ´ÓÖ¸¶¨µÄURLÖĞ»ñÈ¡Êı×é
+	 * æ ¹æ®URLè·å–AQI
 	 */
 	public static String readParse(String urlPath) throws Exception {
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -38,22 +36,20 @@ public class AirQuality {
 			return jsonData;
 		}
 
-		return null;// Í¨¹ıout.Stream.toByteArray»ñÈ¡µ½Ğ´µÄÊı¾İ
+		return null; // é€šè¿‡out.Stream.toByteArrayè·å–åˆ°å†™çš„æ•°æ®
 	}
 
 	/*
-	 * JSONÊı¾İµÄ½âÎö
+	 * JSONæ•°æ®è§£æ
 	 */
 	private static ArrayList<HashMap<String, Object>> Analysis(String jsonStr)
 			throws JSONException {
 		JSONArray jsonArray = null;
-		// initialize list array object
-		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();  // initialize list array object
 		jsonArray = new JSONArray(jsonStr);
-		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
-			// initialize map array object
-			HashMap<String, Object> map = new HashMap<String, Object>();
+		while(jsonArray.length() > 0){
+			JSONObject jsonObject = jsonArray.getJSONObject(0);
+			HashMap<String, Object> map = new HashMap<String, Object>(); // initialize map array object åˆå§‹åŒ–Map
 			map.put("aqi", jsonObject.getString("aqi"));
 			map.put("city", jsonObject.getString("area"));
 			list.add(map);
@@ -62,9 +58,9 @@ public class AirQuality {
 		return null;
 
 	}
-	
-	public static String getAqi(String url){
-		ArrayList<HashMap<String, Object>>	list = null;
+
+	public static String getAqi(String url) {
+		ArrayList<HashMap<String, Object>> list = null;
 		try {
 			list = Analysis(readParse(url));
 		} catch (JSONException e) {
@@ -74,11 +70,11 @@ public class AirQuality {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(list != null) {
+		if (list != null) {
 			return list.get(0).get("aqi").toString();
 		}
 		return null;
-		
+
 	}
-	
+
 }

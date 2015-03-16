@@ -23,5 +23,5 @@
  <!-- 红色 -->
     <color name="purple">#9966CC</color>
  <!-- 紫色 -->
-
+<color name="s_demo_color_background_red">#FF4343</color>
 </resources>
