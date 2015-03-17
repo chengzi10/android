@@ -22,7 +22,7 @@
             android:value="bSRZzTiPg4TqbfGAvSVC1DvM" />
 
         <activity
-            android:name="com.healthslife.loginregister.Login"
+            android:name="com.healthslife.map.WelcomeWithLocation"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -43,6 +43,9 @@
         <activity android:name="com.healthslife.heartrate.XlcsActivity" >
         </activity>
 
+         <!-- 登录服务 -->
+        <activity android:name="com.healthslife.loginregister.Login" >
+        </activity>
         <!-- 人脸识别 -->
 
         <activity

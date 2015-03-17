@@ -30,6 +30,8 @@ import com.healthslife.R;
 import com.healthslife.allinterface.CircleBar;
 import com.healthslife.allinterface.SlidingMenu;
 import com.healthslife.heartrate.XlcsActivity;
+import com.healthslife.loginregister.Login;
+import com.healthslife.map.MapGlobalVariable;
 import com.healthslife.map.MapService;
 
 public class HealthServiceActivity extends Activity {
@@ -76,11 +78,11 @@ public class HealthServiceActivity extends Activity {
 		/*
 		 * 获取欢迎界面传来的城市名称
 		 */
-		Intent getCityName = getIntent();
-		Bundle bundle = getCityName.getExtras();
-		HealthGlobalVariable.cityName = bundle.getString("cityName");
+		// Intent getCityName = getIntent();
+		// Bundle bundle = getCityName.getExtras();
+		// HealthGlobalVariable.cityName = bundle.getString("cityName");
 		Toast.makeText(getApplicationContext(),
-				"您现在位于" + HealthGlobalVariable.cityName, Toast.LENGTH_SHORT)
+				"您现在位于" + MapGlobalVariable.city, Toast.LENGTH_SHORT)
 				.show();
 		// 执行获取AQI的线程
 		CountAirQuality airQuality = new CountAirQuality();
@@ -131,6 +133,26 @@ public class HealthServiceActivity extends Activity {
 			}
 
 		});
+		TextView login_service = (TextView) findViewById(R.id.login_service);
+		login_service.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent heartTest_intent = new Intent();
+				heartTest_intent.setClass(HealthServiceActivity.this,
+						Login.class);
+				startActivity(heartTest_intent);
+			}
+
+		});
+	}
+
+	/*
+	 * 跳转到登录界面
+	 */
+	public void login_service(View v) {
+		startActivity(new Intent(HealthServiceActivity.this, Login.class));
 	}
 
 	public void map_btn(View v) {
@@ -158,7 +180,7 @@ public class HealthServiceActivity extends Activity {
 		protected Void doInBackground(Void... params) {
 			// 根据城市对应的区号获取AQI
 			while (true) {
-				if (!HealthGlobalVariable.cityName.equals("error")) {
+				if (!MapGlobalVariable.city.equals("error")) {
 					String cityCode = null; // 初始化城市区号
 					ArrayList<HashMap<String, Object>> list = null;
 					try {
@@ -167,7 +189,7 @@ public class HealthServiceActivity extends Activity {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					cityCode = resultJson(list, HealthGlobalVariable.cityName);
+					cityCode = resultJson(list, MapGlobalVariable.city);
 					// 将查询到的区号填充到URL中
 					if (cityCode != null) {
 						Log.d("cityCode", cityCode);

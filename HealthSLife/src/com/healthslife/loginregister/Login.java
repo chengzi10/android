@@ -47,8 +47,10 @@ public class Login extends Activity {
 				Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_SHORT)
 				.show();
 				Intent intent = new Intent();
+				LoginRegisterGlobalVariable.login_model = 0;
 				intent.setClass(Login.this, Aty_UserCenter.class);
 				startActivity(intent);
+				finish();
 			}else {
 				Toast.makeText(getApplicationContext(), R.string.login_fail, Toast.LENGTH_SHORT)
 				.show();
@@ -61,6 +63,7 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.aty_login);
+		SuperID.initFaceSDK(this);
 		context = this;
 		/*
 		 * normal login style
@@ -101,12 +104,14 @@ public class Login extends Activity {
 
 			}
 		});
+		
+		
 	}
 
 	public void getInfo(String name, String passwd) {
 		String nameSpace = "http://registerlogin.server.healthSLife.com"; // The namespace of login service
 		String methodName = "loginCheck"; // login method name
-		String endPoint = "http://10.6.12.88:8080/axis2/services/LoginService"; // EndPoint
+		String endPoint = "http://10.6.12.29:8080/axis2/services/LoginService"; // EndPoint
 																				// //emulator should use 10.0.2.2
 		String soapAction = "http://registerlogin.server.healthSLife.com/loginCheck"; // SOAP
 																						// Action
@@ -139,7 +144,7 @@ public class Login extends Activity {
 
 	// 人脸登录
 	public void btn_superidlogin(View v) {
-
+		LoginRegisterGlobalVariable.login_model = 1;
 		SuperID.faceLogin(this);
 	}
 

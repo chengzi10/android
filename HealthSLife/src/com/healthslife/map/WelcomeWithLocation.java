@@ -57,12 +57,11 @@ public class WelcomeWithLocation extends Activity {
 			public void run() {
 				// TODO Auto-generated method stub
 				Intent toHealthService = new Intent();
-				Bundle cityBundle = new Bundle();
 				if (null == MapGlobalVariable.city) {
 					MapGlobalVariable.city = "error";
 				}
-				cityBundle.putString("cityName", MapGlobalVariable.city);
-				toHealthService.putExtras(cityBundle);
+//				cityBundle.putString("cityName", MapGlobalVariable.city);
+//				toHealthService.putExtras(cityBundle);
 				toHealthService.setClass(WelcomeWithLocation.this,
 						HealthServiceActivity.class);
 				startActivity(toHealthService);

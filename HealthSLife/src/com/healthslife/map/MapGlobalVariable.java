@@ -14,7 +14,7 @@ public class MapGlobalVariable {
 	
 	protected static LatLng ll = null; // 定义坐标对象
 	protected static LatLng newll = null; // 定义坐标对象
-	protected static String city = null;              //Set default city null默认城市为空
+	public static String city = null;              //Set default city null默认城市为空
 	protected static boolean isFirstLoc = true;              //Whether the first located是否是首次定位
 	
 }

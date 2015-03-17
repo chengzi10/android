@@ -26,7 +26,7 @@ public class Aty_AppGetFaceEmotion extends Activity {
 	@SuppressWarnings("unused")
 	private String emotion;
 	double maxValue = 0.00;
-	private String maxKey = null;
+	protected static String maxKey = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class Aty_AppGetFaceEmotion extends Activity {
 		setlist();
 	}
 
-	private void setlist() {
+	protected void setlist() {
 		ListView lv = (ListView) findViewById(R.id.datalist);
 		SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.item_facedata, new String[] { "key",
 				"value" }, new int[] { R.id.key, R.id.value });
@@ -45,7 +45,7 @@ public class Aty_AppGetFaceEmotion extends Activity {
 	}
 
 	// 表情数据处理示例
-	private List<Map<String, Object>> getData() {
+	protected List<Map<String, Object>> getData() {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("key", "性别");
@@ -128,7 +128,7 @@ public class Aty_AppGetFaceEmotion extends Activity {
 	}
 
 	// 获取得到的表情数据
-	private void getIntentData() {
+	protected void getIntentData() {
 		String facedata = getIntent().getExtras().getString("facedata");
 		System.out.println(facedata);
 		try {

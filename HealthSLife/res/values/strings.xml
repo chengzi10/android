@@ -20,5 +20,7 @@
     <!-- 登录注册模块 -->
     <string name="login_success">登录成功</string>
     <string name="login_fail">登录失败</string>
+    <string name="bundle_fail">登录失败</string>
+    <string name="bundle_success">登录成功</string>
 
 </resources>

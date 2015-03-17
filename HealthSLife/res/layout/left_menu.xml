@@ -98,12 +98,13 @@
                 android:src="@drawable/img_1" />
 
             <TextView
+                android:id="@+id/login_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/id_img4"
-                android:text="第四个Item"
+                android:text="登录"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
         </RelativeLayout>
