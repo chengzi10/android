@@ -4,16 +4,39 @@
     android:layout_height="match_parent"
     android:background="@color/s_color_background_view" >
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/bar_title"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/s_demo_color_background_red"
-        android:gravity="center"
-        android:text="欢迎使用"
-        android:textColor="@color/s_color_font_hightlight"
-        android:textSize="@dimen/s_size_font_bar" />
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_top_bg"
+        android:orientation="horizontal" >
+        
+        <TextView
+            android:id="@+id/welcome_use"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="欢迎使用"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            />
 
+        <Button
+            android:id="@+id/return_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_centerVertical="true"
+            android:background="@drawable/fanhui1"
+            >
+        </Button>
+    </RelativeLayout>
+   
     <LinearLayout
         android:id="@+id/input_area"
         android:layout_width="match_parent"
@@ -33,8 +56,8 @@
             android:layout_marginTop="24dp"
             android:ems="10"
             android:gravity="center"
-            android:singleLine="true"
-            android:hint="Username" >
+            android:hint="用户名"
+            android:singleLine="true" >
         </EditText>
 
         <EditText
@@ -48,21 +71,11 @@
             android:layout_marginTop="12dp"
             android:ems="10"
             android:gravity="center"
+            android:hint="密码"
             android:inputType="textPassword"
-            android:singleLine="true"
-            android:hint="Password" />
+            android:singleLine="true" />
     </LinearLayout>
-<!--  
-    <Button
-        android:id="@+id/btnclear"
-        android:layout_width="120dp"
-        android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/superid_demo_cleandate_img_normal"
-        android:onClick="btn_clear" />
--->
+   
     <Button
         android:id="@+id/normal_login_btn"
         android:layout_width="match_parent"
@@ -71,17 +84,31 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/button_demoselector"
         android:onClick="normal_login_btn"
         android:text="登录"
-        android:textColor="@color/s_color_background_cell" />
+        android:textColor="#3B3B3B" />
+
+    <Button
+        android:id="@+id/register_service_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/normal_login_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_demoselector"
+        android:onClick="register_btn"
+        android:text="注册"
+        android:textColor="#3B3B3B" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/normal_login_btn"
+        android:layout_below="@id/register_service_btn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:text="使用第三方账号快捷登录"
@@ -95,6 +122,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" >
 
+       
         <Button
             android:id="@+id/weixin_btn"
             android:layout_width="48dp"

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">计步器</string><!-- Pedometer -->
+    <string name="notification_subtitle">计算步数</string><!-- Counting your steps -->
+
+    <string name="started">开始计步</string><!-- Pedometer started. -->
+    <string name="stopped">停止计步</string><!-- Pedometer stopped. -->
+
+    <string name="steps">步</string><!--steps  -->
+    <string name="kilometers">公里</string><!--kilometers  -->
+    <string name="miles">英里</string><!--miles  -->
+    <string name="steps_per_minute">步/分钟</string><!--steps / minute  -->
+    <string name="kilometers_per_hour">公里/小时</string><!--kilometers / hour  -->
+    <string name="miles_per_hour">英里/小时</string><!--miles / hour  -->
+    <string name="calories_burned">kCal</string><!--千卡路里 calories burned  -->
+    <string name="calories_burned_say">千卡路里</string><!--千卡路里 calories burned  -->
+    <string name="centimeters">厘米</string><!--centimeters  -->
+    <string name="inches">英寸</string><!--inches  -->
+    <string name="kilograms">公斤</string><!-- kilograms -->
+    <string name="pounds">英镑</string><!-- pounds -->
+
+    <string name="desired_pace">预期步频</string><!-- Desired pace: -->
+    <string name="desired_speed">预期速度</string><!-- Desired speed: -->
+
+    <string name="pause">暂停</string><!--Pause  -->
+    <string name="resume">恢复</string><!--Resume  -->
+    <string name="reset">重置</string><!--Reset  -->
+    
+    <!-- Settings -->
+    <string name="settings">设置</string><!--Settings  -->
+    <string name="activity_settings">计步器设置</string><!--Pedometer Settings  -->
+    <string name="steps_settings_title">基本设置</string><!--Basic Settings  -->
+    <string name="sensitivity_setting">灵敏度</string><!--Sensitivity  -->
+    <string name="sensitivity_setting_details">校准步数检测</string><!--Calibrate the step detector  -->
+    <string name="sensitivity_setting_title">选择灵敏等级</string><!--Select sensitivity level  -->
+    <string name="extra_high">极高</string><!--extra high  -->
+    <string name="very_high">非常高</string><!--very high  -->
+    <string name="high">高</string><!--high  -->
+    <string name="higher">较高</string><!--higher  -->
+    <string name="medium">中</string><!--medium  -->
+    <string name="lower">较低</string><!--lower  -->
+    <string name="low">低</string><!--low  -->
+    <string name="very_low">非常低</string><!--very low  -->
+    <string name="extra_low">极低</string><!--extra low  -->
+    <string name="operation_level_setting">运行模式</string><!--Operational level  -->
+    <string name="operation_level_setting_details">当屏幕处于关闭状态时，有些操作系统版本禁止使用传感器;设定适合您的级别</string>
+    <!--Some OS versions prevent using sensors when the screen is off; set the level that works for you  -->
+    <string name="operation_level_setting_title">选择运行模式</string><!--Select operational level  -->
+    <string name="run_in_background">后台运行</string><!--Normal (just try running in background)  -->
+    <string name="keep_screen_on">保持屏幕唤醒</string><!--Screen on (keep screen dim)  -->
+    <string name="wake_up">积极模式（关掉屏幕时唤醒）</string><!--Aggressive (wake up when I turn screen off)  -->
+    <string name="units_setting">单位</string><!--Units  -->
+    <string name="units_setting_details">英制或公制单位</string><!--Imperial or metric units  -->
+    <string name="units_setting_title">选择单位</string><!--Choose your units  -->
+    <string name="units_metric">公里（公制）</string><!--metric (kilometers)  -->
+    <string name="units_imperial">英里（英制）</string><!--imperial (miles)  -->
+    <string name="step_length_setting">步长</string><!--Step length  -->
+    <string name="step_length_setting_details">为了计算运动距离、速度和消耗能量</string><!--For distance, speed &amp; calorie calculation  -->
+    <string name="step_length_setting_title">输入步长</string><!--Enter your step length  -->
+    <string name="body_weight_setting">体重</string><!--Body weight  -->
+    <string name="body_weight_setting_details">为了计算消耗能量</string><!--For calorie calculation  -->
+    <string name="body_weight_setting_title">输入体重</string><!--Enter your body weight  -->
+    <string name="exercise_type_setting">锻炼模式</string><!--Exercise type  -->
+    <string name="exercise_type_setting_details">为了计算消耗能量</string><!--For calorie calculation  -->
+    <string name="exercise_type_setting_title">选择锻炼模式</string><!--Choose exercise type  -->
+    <string name="exercise_type_running">跑步</string><!--running  -->
+    <string name="exercise_type_walking">散步</string><!--walking  -->
+    <string name="maintain_setting">保持 步频/速度</string><!-- Maintain pace/speed -->
+    <string name="maintain_setting_details">保持预期步频/速度</string><!--Maintaining a desired a pace/speed  -->
+    <string name="maintain_setting_title">保持</string><!--Maintain:  -->
+    <string name="maintain_nothing">无</string><!--nothing  -->
+    <string name="maintain_pace">步频</string><!-- pace -->
+    <string name="maintain_speed">速度</string><!-- speed -->
+    <string name="voice_settings_title">语音</string><!--Voice  -->
+    <string name="voice_setting">语音</string><!--Speak  -->
+    <string name="voice_setting_details">开启/关闭语音通知</string><!-- Enable/disable voice notification -->
+    <string name="speaking_interval_setting">间隔</string><!--Interval  -->
+    <string name="speaking_interval_setting_details">语音通知时间间隔</string><!-- Voice notification interval -->
+    <string name="interval_15_seconds">15秒</string><!-- 15 seconds -->
+    <string name="interval_30_seconds">30秒</string><!--30 seconds  -->
+    <string name="interval_1_minute">1分钟</string><!--1 minute  -->
+    <string name="interval_2_minutes">2分钟</string><!-- 2 minutes -->
+    <string name="interval_5_minutes">5分钟</string><!--5 minutes  -->
+    <string name="interval_10_minutes">10分钟</string><!--10 minutes  -->
+    <string name="tell_what">告诉什么</string><!-- What to tell -->
+    <string name="tell_steps_setting">步数</string><!-- Steps -->
+    <string name="tell_steps_setting_details"></string><!--  -->
+    <string name="tell_pace_setting">步频</string><!--Pace  -->
+    <string name="tell_pace_setting_details">步/分钟</string><!-- steps / minute -->
+    <string name="tell_distance_setting">距离</string><!-- Distance -->
+    <string name="tell_distance_setting_details">公里或英里</string><!--kilometers or miles  -->
+    <string name="tell_speed_setting">速度</string><!--Speed  -->
+    <string name="tell_speed_setting_details">公里/小时 或 英里/小时</string><!-- km/h or mph -->
+    <string name="tell_calories_setting">消耗能量</string><!--Calories burned  -->
+    <string name="tell_calories_setting_details">千卡路里</string><!--  -->
+    <string name="tell_fasterslower_setting">快/慢</string><!-- Faster/slower -->
+    <string name="tell_fasterslower_setting_details">维持您的预期步频或速度（不间断）</string>
+    <!-- Helps you maintain your desired pace or speed (interval doesn\'t apply) -->
+    <string name="incorrect_step_length">纠正步长，进入设置更改！</string>
+    <!--Incorrect step length format! Go to the Settings to change it!  -->
+
+    <string name="quit">退出</string><!--Quit  -->
+
+</resources>

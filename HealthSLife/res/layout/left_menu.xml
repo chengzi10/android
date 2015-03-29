@@ -7,130 +7,183 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:orientation="vertical" >
 
         <RelativeLayout
+            android:id="@+id/loading_logo_layout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" 
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/loading_logo_image"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/loading_logo" />
+            <LinearLayout 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+               	android:layout_alignTop="@id/loading_logo_image"
+                android:layout_toRightOf="@id/loading_logo_image"
+                >
+             <TextView 
+                android:id="@+id/loading_logo_text1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
+                android:textSize="20sp"
+                android:text="@string/app_name"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                />
+              <TextView 
+                android:id="@+id/loading_logo_text2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp"
+                android:textSize="15sp"
+                android:layout_marginTop="3dp"
+                android:text="快乐享受健康生活"
+                android:textColor="#fff"
+                />
+             </LinearLayout>
+        </RelativeLayout>
+        
+        
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:onClick="heart_test" >
 
             <ImageView
                 android:id="@+id/id_img1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/img_1" />
-
-            <TextView
-                android:id="@+id/music_service"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/id_img1"
-                android:text="音乐服务"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:id="@+id/id_img2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/img_1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/id_img2"
-                android:text="设置信息"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:id="@+id/id_img3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/img_1" />
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/iconhealth" />
 
             <TextView
                 android:id="@+id/heartTest_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/id_img3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="12dp"
+                android:layout_alignTop="@id/id_img1"
+                android:layout_toRightOf="@id/id_img1"
                 android:text="心率监测"
                 android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:onClick="music_service" >
+
+            <ImageView
+                android:id="@+id/id_img2"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="20dp"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/iconmusic" />
+
+            <TextView
+                android:id="@+id/music_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/id_img2"
+                android:text="音乐服务"
+                android:textColor="#ffffff"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" 
+            android:onClick="data_service" >
+
+            <ImageView
+                android:id="@+id/id_img3"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="20dp"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/icondata" />
+
+            <TextView
+                android:id="@+id/data_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/id_img3"
+                android:text="数据中心"
+                android:textColor="#ffffff"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" 
+            android:onClick="login_register" >
 
             <ImageView
                 android:id="@+id/id_img4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/img_1" />
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/iconname" />
 
             <TextView
                 android:id="@+id/login_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/id_img4"
-                android:text="登录"
+                android:text="账号管理"
                 android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" 
+            android:onClick="setting_service" >
 
             <ImageView
                 android:id="@+id/id_img5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/img_1" />
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/iconset" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/id_img5"
-                android:text="第五个Item"
+                android:text="设置"
                 android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
         </RelativeLayout>
 
        

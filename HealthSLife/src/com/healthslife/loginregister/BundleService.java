@@ -8,15 +8,13 @@ import org.ksoap2.transport.HttpTransportSE;
 public class BundleService {
 
 	public static void bundleInfo(String info) {
-		String nameSpace = "http://registerlogin.server.healthSLife.com"; // The namespace of login service
 		String methodName = "bundleFace"; // login method name
-		String endPoint = "http://10.6.12.29:8080/axis2/services/BundleFaceService"; // EndPoint
-																				// //emulator should use 10.0.2.2
-		String soapAction = "http://registerlogin.server.healthSLife.com/bundleFace"; // SOAP
+		String endPoint = LoginRegisterGlobalVariable.urlStr + "BundleFaceService"; // EndPoint
+		String soapAction = LoginRegisterGlobalVariable.nameSpace + "/bundleFace"; // SOAP
 																						// Action
 
 		// 指定WebService的命名空间和调用的方法名
-		SoapObject rpc = new SoapObject(nameSpace, methodName);
+		SoapObject rpc = new SoapObject(LoginRegisterGlobalVariable.nameSpace, methodName);
 		// 设置调用webService接口需要传入的参数
 		rpc.addProperty("phoneNum", info);
 

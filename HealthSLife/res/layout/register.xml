@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/s_color_background_view" >
+
+    <TextView
+        android:id="@+id/bar_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#fffc921a"
+        android:gravity="center"
+        android:text="注册中心"
+        android:textColor="#3B3B3B"
+        android:textSize="@dimen/s_size_font_bar" />
+
+    <LinearLayout
+        android:id="@+id/input_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bar_title"
+        android:background="@color/s_color_background_cell"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/register_username"
+            style="@style/my_edittext_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="用户名"
+            android:singleLine="true" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/register_password"
+            style="@style/my_edittext_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="密码"
+            android:inputType="textPassword"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/register_confirm_password"
+            style="@style/my_edittext_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="确认密码"
+            android:inputType="textPassword"
+            android:singleLine="true" />
+
+    </LinearLayout>
+   
+    <Button
+        android:id="@+id/normal_login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/input_area"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/button_background"
+        android:onClick="normal_login_btn"
+        android:text="注册"
+        android:textColor="#3B3B3B" />
+
+</RelativeLayout>

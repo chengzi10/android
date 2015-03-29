@@ -1,15 +1,14 @@
 package com.healthslife.map;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -27,12 +26,34 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.healthslife.R;
+import com.healthslife.health.HealthServiceActivity;
 
 public class MapService extends Activity {
 
 	public MyLocationListenner myListener = new MyLocationListenner();
-	protected static List<LatLng> points_LatLng = new ArrayList<LatLng>();;   //The list of LatLng's points 坐标点的集合
-	private static boolean isFirstLoc = true;  
+
+	
+	private Handler handle = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			if (MapGlobalVariable.points_LatLng.size() >= 2) {
+				OverlayOptions ooPolyline = new PolylineOptions().width(8)
+						.color(Color.argb(255, 0, 102, 204))
+						.points(MapGlobalVariable.points_LatLng);
+				MapGlobalVariable.mBaiduMap.addOverlay(ooPolyline);
+			} else {
+				Toast.makeText(getApplicationContext(), R.string.remind_sports,
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+		}
+		
+		
+	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,10 +64,9 @@ public class MapService extends Activity {
 		 */
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		setContentView(R.layout.map_service);
-
-		Button viewButton = (Button) findViewById(R.id.button1);
-		Button drawButton = (Button) findViewById(R.id.button2);
+		
 		/*
 		 * 地图初始化
 		 */
@@ -72,48 +92,36 @@ public class MapService extends Activity {
 		MapGlobalVariable.mLocClient.setLocOption(option);
 		MapGlobalVariable.mLocClient.start();
 
-		viewButton.setOnClickListener(new OnClickListener() {
+		new Thread() {
 
 			@Override
-			public void onClick(View v) {
-				// 显示经纬度
-				Toast.makeText(getApplicationContext(),
-						points_LatLng.toString(),
-						Toast.LENGTH_SHORT).show();
-
-			}
-
-		});
-
-		drawButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// 绘制轨迹
-				if (points_LatLng.size() >= 2) {
-					OverlayOptions ooPolyline = new PolylineOptions().width(8)
-							.color(Color.argb(255, 0, 102, 204))
-							.points(points_LatLng);
-					MapGlobalVariable.mBaiduMap.addOverlay(ooPolyline);
-				} else {
-					Toast.makeText(getApplicationContext(),
-							R.string.remind_sports, Toast.LENGTH_SHORT).show();
-					return;
+			public void run() {
+				// TODO Auto-generated method stub
+				super.run();
+				Message msg = handle.obtainMessage();
+				handle.sendMessage(msg);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-
 			}
-
-		});
-
+			
+		}.start();
+		
 	}
 
+	public void to_health_btn (View v) {
+		Intent intent = new Intent(MapService.this , HealthServiceActivity.class);
+		startActivity(intent);
+		finish();
+	}
 	/**
 	 * 定位SDK监听函数
 	 */
 	public class MyLocationListenner implements BDLocationListener {
 
-		int i = 0;// record the LatLng's location
-		 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
 			// map view 销毁后不在处理新接收的位置
@@ -125,12 +133,13 @@ public class MapService extends Activity {
 					.direction(100).latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
 			MapGlobalVariable.mBaiduMap.setMyLocationData(locData);
-			if (isFirstLoc) {
-				isFirstLoc = false;
+			if (MapGlobalVariable.isMapFirstLoc) {
+				MapGlobalVariable.isMapFirstLoc = false;
 				MapGlobalVariable.ll = new LatLng(location.getLatitude(),
 						location.getLongitude());
 
-				points_LatLng.add(i++, MapGlobalVariable.ll);
+				MapGlobalVariable.points_LatLng.add(MapGlobalVariable.i++,
+						MapGlobalVariable.ll);
 				MapStatusUpdate u = MapStatusUpdateFactory
 						.newLatLng(MapGlobalVariable.ll);
 				MapGlobalVariable.mBaiduMap.animateMapStatus(u);
@@ -141,10 +150,11 @@ public class MapService extends Activity {
 				MapStatusUpdate u = MapStatusUpdateFactory
 						.newLatLng(MapGlobalVariable.newll);
 				double distance = DistanceUtil.getDistance(
-						points_LatLng.get(i - 1),
+						MapGlobalVariable.points_LatLng
+								.get(MapGlobalVariable.i - 1),
 						MapGlobalVariable.newll);
-				if (distance > 1 && distance < 10) {
-					points_LatLng.add(i++,
+				if (distance > 5 && distance < 10) {
+					MapGlobalVariable.points_LatLng.add(MapGlobalVariable.i++,
 							MapGlobalVariable.newll);
 				}
 				MapGlobalVariable.mBaiduMap.animateMapStatus(u);

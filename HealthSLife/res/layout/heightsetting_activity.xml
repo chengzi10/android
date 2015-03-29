@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/title_top_bg">
+        <ImageView
+            android:id="@+id/backimage_in_heightsetting"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/back"
+            />
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="身高 "
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            />
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/girl_or_boy_height"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+        <LinearLayout
+            android:id="@+id/bg_num_rl_height"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+
+            <TextView
+                android:id="@+id/bg_remal1_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="35sp" 
+                android:textColor="#fffc921a"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" cm"
+                android:textColor="#fffc921a"
+                android:textSize="35sp"/>
+
+        </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/bg_item_ruler_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_ruler_shape" >
+
+            <HorizontalScrollView
+                android:id="@+id/hsv_scaleplate_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="1dp"
+                android:paddingTop="1dp"
+                android:scrollbarAlwaysDrawHorizontalTrack="false"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_scaleplate_0_height" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_scaleplate_1_height" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_scaleplate_2_height" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_scaleplate_3_height" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_scaleplate_0_height" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <View
+                android:id="@+id/v_mark_height"
+                android:layout_width="2dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="160dp"
+                android:background="#ff0000" />
+        </RelativeLayout>
+    </RelativeLayout>
+	<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <Button
+            android:id="@+id/pre_button_height"
+            android:layout_alignParentLeft="true"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="返  回"
+            android:gravity="center"
+            android:background="@drawable/button_background"
+            />
+        
+        <Button
+            android:id="@+id/next_button_height"
+            android:layout_alignParentRight="true"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="下一步"
+            android:gravity="center"
+            android:background="@drawable/button_background"
+            />
+        
+   	</RelativeLayout>
+</LinearLayout>

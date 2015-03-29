@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/confirm_seting"
+        android:title="确定"
+        android:showAsAction="always"
+        />
+    <item
+        android:id="@+id/batch_seting"
+        android:title="批量设置"
+        android:showAsAction="always"
+        >
+        <menu>
+        <group>
+		<item
+			android:id="@+id/menu_level1"
+			android:title="舒缓级"
+			/>
+		<item
+			android:id="@+id/menu_level2"
+			android:title="愉悦级"
+			/>
+		<item
+			android:id="@+id/menu_level3"
+			android:title="动感级"
+			/>
+		</group>
+		</menu>
+    </item>
+
+
+</menu>

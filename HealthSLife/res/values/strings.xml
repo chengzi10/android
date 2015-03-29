@@ -1,26 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HealthSLife</string>
+    <string name="app_name">健康S生活</string>
     <!-- 健康模块 -->
     <string name="stepnumber">步数</string>
     <string name="energy">能量消耗</string>
     <string name="aqi">空气质量</string>
+    <string name="stepnumber_btn">步行</string>
+    <string name="energy_btn">卡路里</string>
+    <string name="aqi_btn">空气质量</string>
     <string name="excellent">优</string>
     <string name="good">良</string>
     <string name="mild_pollution">轻度污染</string>
     <string name="moderate_pollution">中度污染</string>
     <string name="heavily_polluted">重度污染</string>
     <string name="action_settings">Settings</string>
+    <string name="health_service">健康服务</string>
+    <string name="show_sport_info">显示当前运动信息</string>
+    <string name="sport_track">运动轨迹</string>
+    
+   
     <!-- 地图服务模块 -->
     <string name="remind_sports">亲，人家闷得慌，带我出去走走吧</string>
-    <!--心率监测模块  -->
-    <string name="activity_xlcs_text">请将手指置于摄像头前，尽量在强光下观察到屏幕为红色最佳，并等待数秒~</string>
-    <string name="activity_xlcs_button_save">保存数据</string>
+    <!-- 心率监测模块 -->
+    <string name="xlcs">心率测试</string>
     <!-- 登录注册模块 -->
     <string name="login_success">登录成功</string>
     <string name="login_fail">登录失败</string>
-    <string name="bundle_fail">登录失败</string>
+    <string name="bundle_fail">网络异常，请验证网络</string>
     <string name="bundle_success">登录成功</string>
+    <string name="info_null">想约小雪先输入用户名和密码哦</string>
+    <string name="differ_passwd">您告诉小雪的密码不一致哦</string>
+    <string name="short_passwd">密码不能少于6位</string>
+    <string name="register_fail">注册失败</string>
+    <string name="register_success">注册成功</string>
+    <!-- 音乐服务 -->
+     <string-array name="player_mode">
+        <item>顺序播放</item>
+        <item>随机播放</item>
+        <item>单曲循环</item>
+        <item>列表循环</item>
+        <item>智能播放</item>
+    </string-array>
+    <string-array name="list_tab_items">
+        <item >我的音乐</item>
+    </string-array>
+    
+    <string name="scan_title">扫描歌曲</string>
+    <string name="btn_scan_ok">扫描歌曲</string>
+    <string name="btn_scan_add">添加目录</string>
+    <string name="scan_directory_title">添加扫描目录</string>
+    <string name="btn_scan_directory_goup"> ↑ 返回上一级</string>
+    <string name="btn_san_directory_add">添加</string>
+    <string name="btn_san_directory_back">返回</string>
+    <string name="btn_list_random_music">随机播放</string>
+    <string name="skinsetting_title">皮肤设置</string>
+    <string name="music_time">00:00</string>
+    <string name="appwidget_labelname">健康S生活(1x4)</string>
+    <string name="image_description">图片描述</string>
+    <string name="song_title">标题：</string>
+    <string name="song_artist">歌手：</string>
+    <string name="song_album">专辑：</string>
+    <string name="song_format">格式：</string>
+    <string name="song_duration">时长：</string>
+    <string name="song_size">大小：</string>
+    <string name="song_level">等级：</string>
+    <string name="song_path">路径：</string>
+    
+    
+    <!-- 设置个人信息 -->
+    <string name="next">下一步</string>
+    <string name="completement">完成</string>
 
+    <!-- 兑换服务 -->
+    <string name="activity_introduce">“兑健康”是健康S生活软件推出的一项积分兑换活动，旨在鼓励用户积极参加运动。“兑健康”取义以运动兑健康，以乐趣充生活。本软件会将用户每天的运动量转换为积分并做累计，当到达一定积分值后可以获取、换购小礼品或优惠券。
+        为方便用户使用，我们与“全家Family”、“华联超市”等10家商家合作。用户可以持积分换购二维码到任一换购点获取礼品，优惠券在规定时间内可在任一加盟店进行消费。欢迎大家使用本功能，祝大家健身快乐！</string>
+     <string name="activity_home">活动首页</string>
+    <string name="duihuan_center">兑换中心</string>
+    <string name="cooperation">合作商家</string>
+    <string name="zhijiadao">随身剪套  100积分</string>
+    <string name="icecream">冰激凌  500积分</string>
+    <string name="erji">耳机  2000积分</string>
+    <string name="shubiao">鼠标  3500积分</string>
+    <string name="jiashiqi">加湿器  5300积分</string>
+    <string name="huwan">护腕  7800积分</string>
+    <string name="yinxiang">音响  10000积分</string>
+    <string name="dianzijishiqi">电子计时器  12700积分</string>
+    <string name="cheng">健康秤  31700积分</string>
+    <string name="title_text">您当前的积分为：</string>
+    <string name="integral_text">0分</string>
+    <string name="exchange_explain">持此二维码兑换商品</string>
+    <string name="integral_low">您的积分不足，继续加油！</string>
+    <string name="jifen_center">积分中心</string>
+    
+   
 </resources>

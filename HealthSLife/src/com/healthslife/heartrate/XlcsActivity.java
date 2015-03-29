@@ -4,34 +4,32 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.Window;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.healthslife.R;
+import com.healthslife.health.HealthServiceActivity;
 
-public class XlcsActivity extends Activity implements OnItemClickListener{
+public class XlcsActivity extends Activity{
 
-	 //Activity标签
+//  =============================================分割用===============================================
+    
+    //Activity标签
     private static final String TAG = "心率测试模块";
     
     //控制用
@@ -42,8 +40,10 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
     private static SurfaceHolder previewHolder = null;
     private static Camera camera = null;
     private static View image = null;
-    private static TextView text = null;
-    private static ListView list = null;
+//    private static TextView text = null;
+    private static ImageView background_cover = null;
+    private static ImageView xlcs_helpImageView = null;
+    
 
     //屏幕禁止休眠功能用
     private static WakeLock wakeLock = null;
@@ -66,10 +66,8 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
     private static double beats = 0;
     private static long startTime = 0;
     
-    //数据库
-    private XlcsDatabaseHelper mXlcsDatabaseHelper; 
-    private Cursor mCursor; 
-    private int XLCS_DATAID = 0; 
+    //进度条
+    private static CircleProgressBar mBar;
 
 
 //  =============================================分割用===============================================
@@ -78,6 +76,7 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.hearttest_service);
         
         //获取组件SurfaceView
@@ -88,22 +87,26 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
         
         //获取组件Image，Text和list
         image = findViewById(R.id.xlcs_image);
-        text = (TextView) findViewById(R.id.xlcs_text);
-        list = (ListView) findViewById(R.id.xlcs_listview);
+//        text = (TextView) findViewById(R.id.xlcs_text);
+        background_cover = (ImageView) findViewById(R.id.background);
         
         //电源管理工具
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm
-                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");       
-        //数据库文件
-        mXlcsDatabaseHelper = new XlcsDatabaseHelper(this);
-        mCursor = mXlcsDatabaseHelper.select();
-        list.setAdapter( new ListAdapter(this,mCursor) );
-        list.setOnItemClickListener(this); 
+                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");  
+        
+        //进度条
+        mBar = (CircleProgressBar) findViewById(R.id.xlcs_circle);
+        
+        //help图片
+        xlcs_helpImageView = (ImageView) findViewById(R.id.xlcs_help);
+        
+        
+
     }
 
 //  =============================================分割用===============================================
-
+    
     @SuppressLint("Wakelock")
     public void onResume() {
         super.onResume();
@@ -132,11 +135,13 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
         camera.release();
         camera = null;
     }
+
+
     
 //  =============================================分割用===============================================
     
     //此处定义的是Camera的内部对象，作用是在界面上实时显示摄像头锁获取到的图像数据
-    private static int beatsAvg;//实时心率数据
+    private static int beatsAvg;//平均心率数据
     private static PreviewCallback previewCallback = new PreviewCallback() {
         //View的回调函数对象用于实时预览Camera的图像数据
 
@@ -163,10 +168,19 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
             int imgAvg = ImageProcessing.decodeYUV420SPtoRedAvg(data.clone(),
                     height, width);//获取到图像数据中的红色像素的单位平均值
             Log.i(TAG, "imgAvg=" + imgAvg);
-            if (imgAvg == 0 || imgAvg == 255) {
+            if (imgAvg <= 120 || imgAvg == 255) {//图像异常判定
+//                text.setText("摄像头没有捕获到正确的图像\n请确定将手指覆盖摄像头！");
+//                mBar.setProgress(-1);
+                try {
+                    Thread.currentThread().sleep(1000);//覆盖图形延迟
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                background_cover.setVisibility(View.VISIBLE);
                 processing.set(false);
                 return;
             }//错误数据处理
+            background_cover.setVisibility(View.GONE);
 
             int averageArrayAvg = 0;
             int averageArrayCnt = 0;
@@ -205,12 +219,14 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
             //采样时间
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - startTime) / 1000d;
-            if (totalTimeInSecs >= 10) {
+            if (totalTimeInSecs >= 0.7) {//采样时间
+//                boolean changed = true;//数据改变判定
                 double bps = (beats / totalTimeInSecs);
-                int dpm = (int) (bps * 60d);
-                if (dpm < 30 || dpm > 180) {
+                int dpm = (int) (bps * 60d);//时间使用
+                if (dpm < 40 || dpm > 140) {
                     startTime = System.currentTimeMillis();
                     beats = 0;
+//                    changed = false;
                     processing.set(false);
                     return;
                 }
@@ -234,14 +250,39 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
                 }
                 
                 //数据显示
-                beatsAvg= (beatsArrayAvg / beatsArrayCnt);
-                text.setText("当前心率约为："+String.valueOf(beatsAvg));
+//                if(changed) {
+                    beatsAvg= (beatsArrayAvg / beatsArrayCnt);
+//                    text.setText("当前心率约为："+String.valueOf(beatsAvg));
+                    mBar.setProgress(beatsAvg);
+                    
+//                }
+//                else {
+//                    beatsAvg= 0;
+//                    text.setText("您的心率数值有错\n请确定将手指覆盖摄像头！");
+//                    
+//                }
+////                //连续三次数据相同提示用户
+//                if (warnItem == beatsAvg) {
+//                    warnCount++;
+//                }else if (warnItem != beatsAvg) {
+//                    warnCount = 0;
+//                }
+//                warnItem = beatsAvg;
+//                if(warnCount >= 2)
+//                    text.setText("心跳数值出现错误\n请确定将手指覆盖摄像头！");
+//                //=======================================
                 startTime = System.currentTimeMillis();
                 beats = 0;
             }
             processing.set(false);
         }
     };
+//    private static int warnCount = 0;
+//    private static int warnItem = 0;
+   
+
+//  =============================================分割用===============================================
+    
     
 //  =============================================分割用===============================================
     
@@ -300,49 +341,6 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
         return result;
     }
 
-//  =============================================分割用===============================================
-    
-    //心率测试数据保存的函数，@id/xlcs_button_save注册的点击函数
-    public void xlcs_save(View view) {
-        
-        new AlertDialog.Builder(this)
-        .setTitle("当前心率约为"+beatsAvg+"\n请选择运动阶段")
-        .setItems(XlcsDatabaseHelper.BEATS_TYPE, new OnClickListener() {
-            
-            @SuppressWarnings("deprecation")
-			@Override
-            public void onClick(DialogInterface dialog, int which) {
-                
-                //心跳数据为0，系统数据出错
-                if(beatsAvg == 0) {
-                    Toast.makeText(XlcsActivity.this, "数据出错，请重试",Toast.LENGTH_LONG);
-                    return;
-                    }
-                //获取系统当前时间
-                Time time = new Time();
-                time.setToNow();
-                String timeString = time.format("%Y-%m-%d %H:%M:%S");
-                
-                //保存到数据库
-                mXlcsDatabaseHelper.insert(beatsAvg, which, timeString);
-
-                //显示Toast
-                Toast.makeText(XlcsActivity.this, 
-                        "心率数据："+beatsAvg+
-                        "\n运动阶段："+XlcsDatabaseHelper.BEATS_TYPE[which]+
-                        "\n当前时间："+timeString+
-                        "\n保存中...", 
-                        Toast.LENGTH_LONG).show();
-                //刷新界面
-                mCursor.requery();
-                list.invalidateViews(); 
-                                
-            }
-        })
-        .setNegativeButton("取消", null)
-        .show();
-
-    }
 
 //  =============================================分割用===============================================
  
@@ -379,32 +377,24 @@ public class XlcsActivity extends Activity implements OnItemClickListener{
          
         }
 
-//  =============================================分割用===============================================
+
+    public void xlcs_to_main(View view) {
+        Intent xlcs_to_main = new Intent();
+        xlcs_to_main.setClass(XlcsActivity.this, HealthServiceActivity.class);
+        startActivity(xlcs_to_main);
+        finish();
+    }
     
-    //数据列表项被点急事的数据处理
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
+    public void xlcs_help(View view) {
+
+        xlcs_helpImageView.setVisibility(View.INVISIBLE);
         
-        mCursor.moveToPosition(position); 
-        XLCS_DATAID = mCursor.getInt(0); 
-        new AlertDialog.Builder(this)
-        .setTitle("具体数据为：")
-        .setItems(new String[] {"数据库ID："+mCursor.getInt(0),
-                "心率数据：" + mCursor.getInt(1),
-                "运动阶段：" + XlcsDatabaseHelper.BEATS_TYPE[mCursor.getInt(2)],
-                "记录时间：\n" + mCursor.getString(3)},
-                null)
-                .setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                    @SuppressWarnings("deprecation")
-					public void onClick(DialogInterface dialog, int which) {//删除按键的处理函数
-                        if (XLCS_DATAID == 0) { 
-                            return; 
-                        } //数据出错
-                        mXlcsDatabaseHelper.delete(XLCS_DATAID); //删除数据库数据
-                        mCursor.requery(); //重新读取，数据库较少是可以使用，本程序数据库适用
-                        list.invalidateViews(); //
-                    };
-                })
-                .setNegativeButton("确定", null)//无处理方法按键
-                .show();
-    } 
+    }
+
+//  =============================================分割用===============================================
+    public static int getBeatdata() {
+        return beatsAvg;
+    }
+
+
 }

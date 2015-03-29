@@ -1,0 +1,133 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (javaClasses.cpp:124), pid=580, tid=3208
+#  fatal error: Invalid layout of preloaded class
+#
+# JRE version:  (8.0-b132) (build )
+# Java VM: Java HotSpot(TM) Client VM (25.0-b70 mixed mode windows-x86 )
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x01d2d800):  JavaThread "Unknown thread" [_thread_in_vm, id=3208, stack(0x002b0000,0x00300000)]
+
+Stack: [0x002b0000,0x00300000],  sp=0x002ff3e0,  free space=316k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x1921e8]
+V  [jvm.dll+0x18b2e6]
+V  [jvm.dll+0x3aada]
+V  [jvm.dll+0x3ac90]
+V  [jvm.dll+0x499c3]
+V  [jvm.dll+0x9c1ae]
+V  [jvm.dll+0x9c472]
+V  [jvm.dll+0x140ae1]
+V  [jvm.dll+0x1647e8]
+V  [jvm.dll+0xd8c61]
+C  [javaw.exe+0x13ce]
+C  [javaw.exe+0x1e85]
+C  [javaw.exe+0xab71]
+C  [javaw.exe+0xabfb]
+C  [kernel32.dll+0x1338a]
+C  [ntdll.dll+0x39f72]
+C  [ntdll.dll+0x39f45]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x01d2d800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=3208, stack(0x002b0000,0x00300000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.505 loading class java/lang/CharSequence done
+Event: 0.506 loading class java/lang/String done
+Event: 0.506 loading class java/lang/Class
+Event: 0.523 loading class java/lang/reflect/AnnotatedElement
+Event: 0.541 loading class java/lang/reflect/AnnotatedElement done
+Event: 0.541 loading class java/lang/reflect/GenericDeclaration
+Event: 0.547 loading class java/lang/reflect/GenericDeclaration done
+Event: 0.547 loading class java/lang/reflect/Type
+Event: 0.547 loading class java/lang/reflect/Type done
+Event: 0.548 loading class java/lang/Class done
+
+
+Dynamic libraries:
+0x000b0000 - 0x000e0000 	C:\Program Files (x86)\Java\jre8\bin\javaw.exe
+0x77920000 - 0x77aa0000 	C:\Windows\SysWOW64\ntdll.dll
+0x754f0000 - 0x75600000 	C:\Windows\syswow64\kernel32.dll
+0x761f0000 - 0x76237000 	C:\Windows\syswow64\KERNELBASE.dll
+0x75fa0000 - 0x76040000 	C:\Windows\syswow64\ADVAPI32.dll
+0x75ae0000 - 0x75b8c000 	C:\Windows\syswow64\msvcrt.dll
+0x762a0000 - 0x762b9000 	C:\Windows\SysWOW64\sechost.dll
+0x758a0000 - 0x75990000 	C:\Windows\syswow64\RPCRT4.dll
+0x74fe0000 - 0x75040000 	C:\Windows\syswow64\SspiCli.dll
+0x74fd0000 - 0x74fdc000 	C:\Windows\syswow64\CRYPTBASE.dll
+0x753a0000 - 0x754a0000 	C:\Windows\syswow64\USER32.dll
+0x75810000 - 0x758a0000 	C:\Windows\syswow64\GDI32.dll
+0x75f90000 - 0x75f9a000 	C:\Windows\syswow64\LPK.dll
+0x75cb0000 - 0x75d4d000 	C:\Windows\syswow64\USP10.dll
+0x73000000 - 0x7319e000 	C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.17514_none_41e6975e2bd6f2b2\COMCTL32.dll
+0x76240000 - 0x76297000 	C:\Windows\syswow64\SHLWAPI.dll
+0x75d60000 - 0x75dc0000 	C:\Windows\system32\IMM32.DLL
+0x762c0000 - 0x7638c000 	C:\Windows\syswow64\MSCTF.dll
+0x6c6c0000 - 0x6c77f000 	C:\Program Files (x86)\Java\jre8\bin\msvcr100.dll
+0x6edb0000 - 0x6f146000 	C:\Program Files (x86)\Java\jre8\bin\client\jvm.dll
+0x74990000 - 0x74997000 	C:\Windows\system32\WSOCK32.dll
+0x75990000 - 0x759c5000 	C:\Windows\syswow64\WS2_32.dll
+0x778f0000 - 0x778f6000 	C:\Windows\syswow64\NSI.dll
+0x737a0000 - 0x737d2000 	C:\Windows\system32\WINMM.dll
+0x75dc0000 - 0x75dc5000 	C:\Windows\syswow64\PSAPI.DLL
+0x749a0000 - 0x749ac000 	C:\Program Files (x86)\Java\jre8\bin\verify.dll
+0x740b0000 - 0x740d1000 	C:\Program Files (x86)\Java\jre8\bin\java.dll
+0x740f0000 - 0x74103000 	C:\Program Files (x86)\Java\jre8\bin\zip.dll
+0x714a0000 - 0x7158b000 	C:\Windows\system32\dbghelp.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8 -Xbootclasspath:D:\Android\adt-bundle-windows-x86-20140702\adt-bundle-windows-x86-20140702\sdk\platforms\android-19\android.jar;D:\Android\adt-bundle-windows-x86-20140702\adt-bundle-windows-x86-20140702\sdk\add-ons\addon-google_apis_x86-google-19\libs\usb.jar;D:\Android\adt-bundle-windows-x86-20140702\adt-bundle-windows-x86-20140702\sdk\add-ons\addon-google_apis_x86-google-19\libs\effects.jar;D:\Android\adt-bundle-windows-x86-20140702\adt-bundle-windows-x86-20140702\sdk\add-ons\addon-google_apis_x86-google-19\libs\maps.jar 
+java_command: com.healthslife.server.UpdateUserInfo
+java_class_path (initial): D:\Android\AndroidWorkplace\HealthSLife\libs\NineOldAndroid-2.4.0.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\httpmime-4.1.3.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\jpush-sdk-release1.7.3.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-Core-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\AndroidEasingFunctions-1.0.0.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\android-support-v4.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-Wechat-Moments-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-SinaWeibo-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\BaiduLBS_Android.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\mframework.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-Wechat-Favorite-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-QQ-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-Wechat-Core-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\SuperIDSDK.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\AndroidViewAnimations-1.1.3.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-QZone-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\zxing.jar;D:\Android\AndroidWorkplace\HealthSLife\libs\ShareSDK-Wechat-2.5.9.jar;D:\Android\AndroidWorkplace\HealthSLife\bin\classes;C:\Users\Administrator\Desktop\projectManage\需导入的jar包\BaiduLBS_Android.jar;C:\Users\Administrator\Desktop\projectManage\需导入的jar包\httpmime-4.1.3.jar;C:\Users\Administrator\Desktop\projectManage\需导入的jar包\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar;C:\Users\Administrator\Desktop\projectManage\需导入的jar包\NineOldAndroid-2.4.0.jar;C:\Users\Administrator\Desktop\projectManage\需导入的jar包\SuperIDSDK.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0
+CLASSPATH=C:\Program Files (x86)\Java\jdk1.8.0\lib\dt.jar;C:\Program Files (x86)\Java\jdk1.8.0\lib\tools.jar
+PATH=C:/Program Files (x86)/Java/jre8/bin/client;C:/Program Files (x86)/Java/jre8/bin;C:/Program Files (x86)/Java/jre8/lib/i386;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Java\jdk1.8.0\bin;C:\Program Files (x86)\Java\jdk1.8.0\jre\bin;D:\Program Files (x86)\TortoiseSVN\bin;D:\Android\adt-bundle-windows-x86-20140702\adt-bundle-windows-x86-20140702\eclipse;
+USERNAME=Administrator
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 23 Stepping 10, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 , 64 bit Build 7601 Service Pack 1
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 23 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, tsc
+
+Memory: 4k page, physical 3105384k(88912k free), swap 6208912k(2690508k free)
+
+vm_info: Java HotSpot(TM) Client VM (25.0-b70) for windows-x86 JRE (1.8.0-b132), built on Mar  4 2014 03:51:15 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Sat Mar 28 09:45:13 2015
+elapsed time: 0 seconds
+

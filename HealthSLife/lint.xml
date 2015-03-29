@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ClickableViewAccessibility" severity="ignore" />
+    <issue id="DefaultLocale" severity="ignore" />
+    <issue id="HandlerLeak" severity="ignore" />
+    <issue id="InflateParams" severity="ignore">
+        <ignore path="src/com/healthslife/music/adapter/ScanListAdapter.java" />
+        <ignore path="src/com/healthslife/music/adapter/SongItemAdapter.java" />
+    </issue>
+    <issue id="NewApi">
+        <ignore path="src/com/healthslife/integralactivity/ExchangeCenter.java" />
+        <ignore path="src/com/healthslife/system/Music_Setting_Activity_system.java" />
+    </issue>
+    <issue id="WorldReadableFiles" severity="ignore" />
+    <issue id="WorldWriteableFiles" severity="ignore" />
+</lint>

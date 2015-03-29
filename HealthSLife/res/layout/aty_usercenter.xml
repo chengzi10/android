@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#F0F0F0" >
 
     <RelativeLayout
         android:id="@+id/bar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/s_demo_color_background_red"
+        android:background="@drawable/title_top_bg"
         android:gravity="center" >
 
         <TextView
@@ -21,148 +22,217 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/superid_common_viewbg_img" >
+        android:id="@+id/relative"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_below="@id/bar"
+        android:background="@drawable/orange_bg" >
 
-        <LinearLayout
-            android:id="@+id/userinfo"
+        <RelativeLayout
+            android:id="@+id/avatar_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="220dp" >
+
+            <ImageView
+                android:id="@+id/avatarimg"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="60dp"
+                android:src="@drawable/superid_avatar_img_default" 
+                android:onClick="change_head"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/user_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/superid_demo_usercenterbg_img"
+            android:layout_height="40dp"
+            android:layout_below="@id/avatar_layout"
+            android:background="@drawable/alph_bg"
             android:orientation="vertical" >
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="25dp"
-                android:paddingTop="24dp" >
+                android:layout_centerInParent="true"
+                android:text=""
+                android:textColor="@color/s_color_font_main"
+                android:textSize="@dimen/s_size_font_title" />
+        </RelativeLayout>
+    </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/avatarimg"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/superid_avatar_img_default" />
+    <TableLayout
+        android:id="@+id/model_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relative"
+        android:padding="3dip"
+        android:stretchColumns="*" >
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingLeft="22dp"
-                    android:text=""
-                    android:textColor="@color/s_color_font_main"
-                    android:textSize="@dimen/s_size_font_title" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:paddingLeft="25dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="手机"
-                    android:textColor="@color/s_color_font_main"
-                    android:textSize="@dimen/s_size_font_text" />
-
-                <TextView
-                    android:id="@+id/tv_phonenum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingLeft="40dp"
-                    android:text=""
-                    android:textColor="@color/s_color_font_vice"
-                    android:textSize="@dimen/s_size_font_text" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/userinfo"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/superid_demo_usercenterbg_img"
-            android:orientation="vertical" >
-
-           
-        </LinearLayout>
-
-       <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/action"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/superid_demo_usercenterbg_img"
-            android:orientation="vertical" >
-
+        <TableRow>
 
             <RelativeLayout
-                android:id = "@+id/faceTest_layout"
-                android:layout_width="match_parent"
+                android:layout_width="1dip"
                 android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/image_jifen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/jifen" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:gravity="center_vertical"
-                    android:text="人脸信息"
-                    android:textColor="@color/s_color_font_main"
-                    android:textSize="@dimen/s_size_font_text" />
+                    android:layout_below="@id/image_jifen"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="积分中心" />
+                
+                 <View
+                    android:layout_toRightOf="@id/image_jifen"
+                    android:layout_width="1dip"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="#fffc921a" />
+                
+            </RelativeLayout>
 
-                <Button
+            <RelativeLayout
+                android:layout_width="1dip"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/image_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="25dp"
-                    android:background="@null"
-                    android:onClick="btn_facedata"
-                    android:text="点击体验"
-                    android:textColor="@color/s_demo_color_background_red"
-                    android:textSize="16sp" />
-            </RelativeLayout>
-             <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:onClick="btn_health"
-                    android:text="健康模块"
-                    android:textColor="@color/s_demo_color_background_red"
-                    android:textSize="16sp" />
-          
-        </LinearLayout>
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/shuju" />
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/superid_demo_usercenterbg_img"
-            android:onClick="btn_logout"
-            android:text="退出登录"
-            android:textColor="@color/s_demo_color_background_red" />
-    </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_data"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="数据中心" />
+                <View
+                    android:layout_toRightOf="@id/image_data"
+                    android:layout_width="1dip"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="#fffc921a" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="1dip"
+                android:layout_height="wrap_content" 
+                android:onClick="setting_center">
+
+                <ImageView
+                    android:id="@+id/image_set"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/setting" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_set"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="设置中心" />
+            </RelativeLayout>
+        </TableRow>
+
+        <View
+            android:layout_height="1dip"
+            android:layout_marginTop="10dp"
+            android:background="#fffc921a" />
+
+        <TableRow>
+
+            <RelativeLayout
+                android:layout_width="1dip"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/image_health"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/health" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_health"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="健康中心" />
+
+                <View
+                    android:layout_toRightOf="@id/image_health"
+                    android:layout_width="1dip"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="#fffc921a" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="1dip"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/image_music"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/music" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_music"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="音乐中心" />
+                <View
+                    android:layout_toRightOf="@id/image_music"
+                    android:layout_width="1dip"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="#fffc921a" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative_face"
+                android:layout_width="1dip"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/image_face"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/face" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_face"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="人脸识别" />
+            </RelativeLayout>
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>
