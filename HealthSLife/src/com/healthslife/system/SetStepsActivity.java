@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.healthslife.R;
+import com.healthslife.sensor.data.SensorData;
 
 public class SetStepsActivity extends Activity {
 
@@ -72,8 +74,14 @@ public class SetStepsActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				UserMessage_system.setSequence(SetStepsActivity.this, Integer.parseInt(showsteps.getText().toString()));
-				SetStepsActivity.this.finish();
+				if(showsteps.getText().toString().equals("")){
+					Toast.makeText(SetStepsActivity.this, "不可以为空的哦！", Toast.LENGTH_LONG).show();
+				}else{
+					UserMessage_system.setSequence(SetStepsActivity.this, Integer.parseInt(showsteps.getText().toString()));
+					UserMessage_system.setParameters(SetStepsActivity.this);
+					SensorData.setSpeakHZ_StepNum(UserMessage_system.SEQUENCE);//获取播报步数频率
+					SetStepsActivity.this.finish();
+				}
 			}
 		});
 		
@@ -125,7 +133,7 @@ public class SetStepsActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		UserMessage_system.setParameters(this);
+		
 		super.onDestroy();
 	}
 

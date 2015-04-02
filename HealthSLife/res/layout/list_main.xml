@@ -27,28 +27,28 @@
             android:gravity="center"
             android:orientation="horizontal" >
 
-             <ImageButton
-		        android:id="@+id/ibtn_back"
-		        android:layout_width="60dp"
-		        android:layout_height="50dp"
-		        android:contentDescription="@string/image_description"
-		        android:background="@drawable/back" 
-        	/>
+            <ImageView
+                android:id="@+id/ibtn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/liebiao" />
+
             <include
                 android:id="@+id/list_tab_item_music"
                 layout="@layout/list_tab_item" />
-            <ImageButton
-		        android:id="@+id/ibtn_scan"
-		        android:layout_width="40dp"
-		        android:layout_height="40dp"
-		        android:layout_marginRight="5dp"
-		        android:contentDescription="@string/image_description"
-		        android:background="@drawable/btn_menu_scanner" 
-        	/>
 
+            <ImageButton
+                android:id="@+id/ibtn_scan"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/btn_menu_scanner"
+                android:contentDescription="@string/image_description" />
         </LinearLayout>
-        
-       
+
         <com.healthslife.music.custom.FlingGalleryView
             android:id="@+id/fgv_list_main"
             android:layout_width="fill_parent"
@@ -57,8 +57,6 @@
             <include
                 android:id="@+id/list_main_music"
                 layout="@layout/list_main_music" />
-
-            
         </com.healthslife.music.custom.FlingGalleryView>
     </LinearLayout>
 
@@ -79,11 +77,12 @@
             <ImageButton
                 android:id="@+id/ibtn_list_content_icon"
                 android:layout_width="60dp"
-                android:layout_height="24dp"
+                android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
-                android:contentDescription="@string/image_description"
-                android:layout_marginTop="13dp"
-                />
+                android:layout_centerVertical="true"
+                
+                android:contentDescription="@string/image_description" 
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/tv_list_content_title"
@@ -95,8 +94,7 @@
                 android:lines="1"
                 android:singleLine="true"
                 android:textColor="#FFFFFFFF"
-                android:textSize="16sp"
-                />
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/ibtn_list_content_do_icon"
@@ -152,7 +150,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/list_bottom_bar_bg"
+        android:background="@drawable/bottom6"
         android:gravity="center"
         android:orientation="horizontal" >
 
@@ -161,15 +159,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:contentDescription="@string/image_description"
-            android:background="@drawable/min_default_album" />
+            android:background="@drawable/min_default_album"
+            android:contentDescription="@string/image_description" />
 
         <ImageButton
             android:id="@+id/ibtn_player_control"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/image_description"
-            android:background="@drawable/player_btn_mini_player" />
+            android:background="@drawable/player_btn_mini_player"
+            android:contentDescription="@string/image_description" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -188,37 +186,37 @@
                 android:lines="1"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textSize="13sp"/>
-			<RelativeLayout 
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    >
-			    <TextView 
-			    android:text="@string/music_time"
-			    android:id="@+id/tv_player_currentPosition"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_alignParentLeft="true"
-			    android:textColor="@android:color/white"
-			    android:textSize="10sp"
-			    />
-			     <TextView 
-			    android:text="@string/music_time"
-			    android:id="@+id/tv_player_duration"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textSize="10sp"
-			    android:textColor="@android:color/white"
-			    android:layout_alignParentRight="true"
-			    />
-			</RelativeLayout>
+                android:textSize="13sp" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/tv_player_currentPosition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/music_time"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tv_player_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/music_time"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
             <ProgressBar
                 android:id="@+id/pb_player_progress"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="8dp"
-                android:progressDrawable="@drawable/player_progress_style"
-                 />
+                android:progressDrawable="@drawable/player_progress_style" />
         </LinearLayout>
     </LinearLayout>
 

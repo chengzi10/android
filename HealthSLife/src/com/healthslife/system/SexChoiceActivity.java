@@ -21,7 +21,6 @@ public class SexChoiceActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		//在程序启动时必须首先调用这3行代码
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         UserMessage_system.setParameters(this);
         MusicMessage_system.setValues(this);
         

@@ -23,19 +23,24 @@ public class BundleService {
 				SoapEnvelope.VER10);
 		envelope.bodyOut = rpc;
 
-		HttpTransportSE transport = new HttpTransportSE(endPoint);
+		HttpTransportSE transport = new HttpTransportSE(endPoint,5000);
 		try {
 			// 调用WebService
 			transport.call(soapAction, envelope);
+			LoginRegisterGlobalVariable.bundle_result = "no_exception";
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			LoginRegisterGlobalVariable.bundle_result = "net_exception";
 		}
 
-		// 获取返回的数据
-		SoapObject object = (SoapObject) envelope.bodyIn;
-		// 获取返回的结果
-		LoginRegisterGlobalVariable.bundle_result = object.getProperty(0).toString();
-
+		if(!LoginRegisterGlobalVariable.bundle_result.equals("net_exception")) {
+			// 获取返回的数据
+			SoapObject object = (SoapObject) envelope.bodyIn;
+			// 获取返回的结果
+			LoginRegisterGlobalVariable.bundle_result = object.getProperty(0).toString();
+		}else {
+			return;
+		}
 	}
 
 }

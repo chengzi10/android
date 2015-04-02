@@ -3,6 +3,7 @@
 
     <style name="textAppearanceDialogWindowTitle">
         <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#ffff</item>
         <item name="android:textStyle">normal</item>
     </style>
 

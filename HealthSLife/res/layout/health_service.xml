@@ -7,7 +7,7 @@
         android:id="@+id/id_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/orange_bg_small" >
+        android:background="@drawable/bg5" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -24,41 +24,36 @@
 
                 <RelativeLayout
                     android:id="@+id/title_health"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/title_top_bg"
-                    android:orientation="horizontal" >
+                    android:background="@drawable/title_top_bg" >
+
+                    <ImageView
+                        android:id="@+id/to_navige_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/liebiao" />
 
                     <TextView
-                        android:id="@+id/textView1"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
+                        android:layout_height="fill_parent"
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
                         android:text="@string/health_service"
-                        android:textColor="#FFFFFF"
-                        android:textSize="25sp"
-                        />
+                        android:textColor="#ffffff"
+                        android:textSize="16sp" />
 
                     <Button
-                        android:id="@+id/to_navige_btn"
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="13dp"
-                        android:background="@drawable/liebiao"
-                        android:gravity="left"
-                        android:onClick="to_navige_btn" >
-                    </Button>
-                     <Button
                         android:id="@+id/map_btn"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="6dp"
-                        android:background="@drawable/ditu"
-                        android:layout_alignParentRight="true" >
+                        android:background="@drawable/ditu" >
                     </Button>
                 </RelativeLayout>
 
@@ -69,12 +64,31 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="30dp" />
 
-                <TextView
+                <RelativeLayout 
+                    android:id="@+id/text_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    
+                    >
+                    <TextView
+                    android:id="@+id/text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_centerInParent="true"
                     android:layout_marginTop="20dp"
+                    android:textSize="15sp"
                     android:text="@string/show_sport_info" />
+                    <ImageView 
+                        android:id="@+id/sound_btn"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/sound_btn_style"
+                        />
+                    
+                </RelativeLayout>
+                
 
                 <RelativeLayout
                     android:id="@+id/image_btn"
@@ -87,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/kaluli_normal2"
+                        android:background="@drawable/kaluli_normal"
                         android:contentDescription="@string/image_description"
                         android:onClick="energy_btn" />
 

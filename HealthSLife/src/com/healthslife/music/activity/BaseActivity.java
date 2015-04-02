@@ -24,7 +24,7 @@ public class BaseActivity extends Activity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		super.onCreate(savedInstanceState);
 		// 设置背景
-		this.getWindow().setBackgroundDrawableResource(R.drawable.main_bg07);
+		this.getWindow().setBackgroundDrawableResource(R.drawable.bg3);
 		commonReceiver=new CommonReceiver();
 	}
 	

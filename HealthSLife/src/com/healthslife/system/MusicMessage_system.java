@@ -59,6 +59,7 @@ public class MusicMessage_system {
 			externalCursor.moveToNext();
 		}
 
+		externalCursor.close();
 		// 在SharedPreferences中读取音乐id对应的level
 		for (int i = 0; i < count; i++) {
 			level[i] = sp.getInt(id[i] + "", 2);
@@ -78,13 +79,13 @@ public class MusicMessage_system {
 
 	// 调用此方法在名为musicMessagePreferences的Preferences文件中写入以音乐id为key的level
 	// 调用前要先传入一个Context对象
-	public static void setLevel(Context context, int pos, int ids, int lev) {
+	public static void setLevel(Context context, int pos, String path, int lev) {
 
 		SharedPreferences musicMessagePreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor;
 		editor = musicMessagePreferences.edit();
-		editor.putInt(ids + "", lev);
+		editor.putInt(path, lev);
 		editor.commit();
 		level[pos] = lev;
 	}

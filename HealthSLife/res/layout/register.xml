@@ -4,15 +4,39 @@
     android:layout_height="match_parent"
     android:background="@color/s_color_background_view" >
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/bar_title"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#fffc921a"
-        android:gravity="center"
-        android:text="注册中心"
-        android:textColor="#3B3B3B"
-        android:textSize="@dimen/s_size_font_bar" />
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_top_bg"
+        android:orientation="horizontal" >
+        
+        <TextView
+            android:id="@+id/welcome_use"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="注册中心"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            />
+
+        <Button
+            android:id="@+id/return_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:onClick="return_login_btn"
+            android:background="@drawable/back"
+            >
+        </Button>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/input_area"
@@ -77,7 +101,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="18dp"
-        android:background="@drawable/button_background"
+        android:background="@drawable/button_demoselector"
         android:onClick="normal_login_btn"
         android:text="注册"
         android:textColor="#3B3B3B" />

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.R.integer;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -36,6 +37,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -45,7 +47,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.healthslife.R;
-import com.healthslife.health.HealthServiceActivity;
 import com.healthslife.music.adapter.ListItemAdapter;
 import com.healthslife.music.adapter.SongItemAdapter;
 import com.healthslife.music.custom.FlingGalleryView;
@@ -61,9 +62,12 @@ import com.healthslife.music.entity.Song;
 import com.healthslife.music.service.MediaPlayerManager;
 import com.healthslife.music.service.MediaPlayerManager.ServiceConnectionListener;
 import com.healthslife.music.util.Common;
+import com.healthslife.system.MusicMessage_system;
 
 public class ListMainActivity extends BaseActivity {
 
+	// 音乐等级
+	private int level = 2;
 	// 导航栏选项卡布局数组
 	private ViewGroup[] vg_list_tab_item = new ViewGroup[1];
 	private FlingGalleryView fgv_list_main;
@@ -83,7 +87,7 @@ public class ListMainActivity extends BaseActivity {
 
 	// 本地音乐扫描音乐和返回按钮
 	private ImageButton ibtn_scan;// 扫描图标
-	private ImageButton ibtn_back;// 返回图标
+	private ImageView ibtn_back;// 返回图标
 
 	// 本地音乐二三级布局
 	private ImageButton ibtn_list_content_icon;// 左边图标
@@ -125,6 +129,7 @@ public class ListMainActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_main);
+
 
 		SystemSetting setting = new SystemSetting(this, false);
 		checkScannerTip(setting);
@@ -192,9 +197,16 @@ public class ListMainActivity extends BaseActivity {
 
 		// 顶部扫描音乐和返回
 		ibtn_scan = (ImageButton) this.findViewById(R.id.ibtn_scan);
-		ibtn_back = (ImageButton) this.findViewById(R.id.ibtn_back);
 		ibtn_scan.setOnClickListener(imageButton_listener);
-		ibtn_back.setOnClickListener(imageButton_listener);
+		ibtn_back = (ImageView) this.findViewById(R.id.ibtn_back);
+		ibtn_back.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 
 		// 切换主屏幕内容容器
 		fgv_list_main = (FlingGalleryView) rl_list_main_content
@@ -457,11 +469,6 @@ public class ListMainActivity extends BaseActivity {
 				Intent it = new Intent(ListMainActivity.this,
 						ScanMusicActivity.class);
 				startActivityForResult(it, 1);
-			} else if (v.getId() == R.id.ibtn_back) { // 返回按钮
-				Intent it = new Intent(ListMainActivity.this,
-						HealthServiceActivity.class);
-				startActivity(it);
-				finish();
 			}
 		}
 	};
@@ -978,12 +985,15 @@ public class ListMainActivity extends BaseActivity {
 
 		RadioGroup rg_pl = new RadioGroup(ListMainActivity.this);
 		rg_pl.setLayoutParams(params);
+
 		final List<RadioButton> rbtns = new ArrayList<RadioButton>();
 
 		for (int i = 0; i < pList.size(); i++) {
 			String[] str_temp = pList.get(i);
 			RadioButton rbtn_temp = new RadioButton(ListMainActivity.this);
 			rbtn_temp.setText(str_temp[1]);
+			rbtn_temp.setTextColor(Color.rgb(255, 255, 255));
+			rbtn_temp.setTextSize(14);
 			rbtn_temp.setTag(str_temp[0]);
 			rg_pl.addView(rbtn_temp, params);
 			rbtns.add(rbtn_temp);
@@ -1026,16 +1036,22 @@ public class ListMainActivity extends BaseActivity {
 
 		final RadioButton rbtn_lowLevel = new RadioButton(ListMainActivity.this);
 		rbtn_lowLevel.setText("舒缓");
+		rbtn_lowLevel.setTextColor(Color.rgb(255, 255, 255));
+		rbtn_lowLevel.setTextSize(14);
 		rg_level.addView(rbtn_lowLevel, params);
 
 		final RadioButton rbtn_middleLevel = new RadioButton(
 				ListMainActivity.this);
 		rbtn_middleLevel.setText("愉悦");
+		rbtn_middleLevel.setTextColor(Color.rgb(255, 255, 255));
+		rbtn_middleLevel.setTextSize(14);
 		rg_level.addView(rbtn_middleLevel, params);
 
 		final RadioButton rbtn_highLevel = new RadioButton(
 				ListMainActivity.this);
 		rbtn_highLevel.setText("动感");
+		rbtn_highLevel.setTextColor(Color.rgb(255, 255, 255));
+		rbtn_highLevel.setTextSize(14);
 		rg_level.addView(rbtn_highLevel, params);
 
 		new XfDialog.Builder(ListMainActivity.this).setTitle("设置音乐节奏等级")
@@ -1048,7 +1064,6 @@ public class ListMainActivity extends BaseActivity {
 							type = 0;
 							song.setLevel(1);
 							songDao.updateByLevel(id, 1);
-
 							toast = Common.showMessage(toast,
 									ListMainActivity.this, "设置为舒缓音乐成功");
 						} else if (rbtn_middleLevel.isChecked()) {
@@ -1094,6 +1109,8 @@ public class ListMainActivity extends BaseActivity {
 		final CheckBox cb_deletesong = new CheckBox(ListMainActivity.this);
 		cb_deletesong.setLayoutParams(params);
 		cb_deletesong.setText("同时删除本地文件");
+		cb_deletesong.setTextColor(Color.rgb(255, 255, 255));
+		cb_deletesong.setTextSize(14);
 
 		XfDialog.Builder builder = new XfDialog.Builder(ListMainActivity.this)
 				.setView(cb_deletesong).setTitle(title)
@@ -1178,16 +1195,24 @@ public class ListMainActivity extends BaseActivity {
 		final RadioButton rbtn_ringtones = new RadioButton(
 				ListMainActivity.this);
 		rbtn_ringtones.setText("来电铃声");
+		rbtn_ringtones.setTextColor(Color.rgb(255, 255, 255));
+		rbtn_ringtones.setTextSize(14);
 		rg_ring.addView(rbtn_ringtones, params);
 		final RadioButton rbtn_alarms = new RadioButton(ListMainActivity.this);
 		rbtn_alarms.setText("闹铃铃声");
+		rbtn_alarms.setTextColor(Color.rgb(255, 255, 255));
+		rbtn_alarms.setTextSize(14);
 		rg_ring.addView(rbtn_alarms, params);
 		final RadioButton rbtn_notifications = new RadioButton(
 				ListMainActivity.this);
 		rbtn_notifications.setText("通知铃声");
+		rbtn_notifications.setTextColor(Color.rgb(255, 255, 255));
+		rbtn_notifications.setTextSize(14);
 		rg_ring.addView(rbtn_notifications, params);
 		final RadioButton rbtn_all = new RadioButton(ListMainActivity.this);
 		rbtn_all.setText("全部铃声");
+		rbtn_all.setTextColor(Color.rgb(255, 255, 255));
+		rbtn_all.setTextSize(14);
 		rg_ring.addView(rbtn_all, params);
 
 		new XfDialog.Builder(ListMainActivity.this).setTitle("设置铃声")

@@ -73,6 +73,7 @@
         <TableRow>
 
             <RelativeLayout
+                android:onClick="jifen_center"
                 android:layout_width="1dip"
                 android:layout_height="wrap_content" >
 
@@ -81,7 +82,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/jifen" />
+                    android:src="@drawable/jifen"
+                     />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,6 +104,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:onClick="data_center"
                 android:layout_width="1dip"
                 android:layout_height="wrap_content" >
 
@@ -159,7 +162,8 @@
 
             <RelativeLayout
                 android:layout_width="1dip"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:onClick="health_center" >
 
                 <ImageView
                     android:id="@+id/image_health"
@@ -187,14 +191,16 @@
 
             <RelativeLayout
                 android:layout_width="1dip"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:onClick="music_center" >
 
                 <ImageView
                     android:id="@+id/image_music"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/music" />
+                    android:src="@drawable/music"
+                     />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -215,7 +221,8 @@
             <RelativeLayout
                 android:id="@+id/relative_face"
                 android:layout_width="1dip"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:onClick="face_center" >
 
                 <ImageView
                     android:id="@+id/image_face"

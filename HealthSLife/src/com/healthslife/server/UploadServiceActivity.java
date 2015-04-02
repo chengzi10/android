@@ -31,13 +31,18 @@ public class UploadServiceActivity extends Activity{
 			Log.d("handle", "into handle");
 			String result = msg.obj.toString();
 			Log.d("TAG", result);
-			Toast.makeText(getApplicationContext(),
-					result, Toast.LENGTH_SHORT).show();
 			if (result.equals("true")) {
 				Toast.makeText(getApplicationContext(),
 						"上传数据成功", Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent();
 				intent.setClass(UploadServiceActivity.this, HealthServiceActivity.class);
+				startActivity(intent);
+				finish();
+			} else if (result.equals("net_exception")) {
+				Toast.makeText(getApplicationContext(), "网络连接异常，请查看网络...",
+						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent();
+				intent.setClass(UploadServiceActivity.this, SettingActivity.class);
 				startActivity(intent);
 				finish();
 			} else {
@@ -76,6 +81,8 @@ public class UploadServiceActivity extends Activity{
 				String str = null;
 				if(info.equals("true") && data.equals("true")) {
 					str = "true";
+				}else if(info.equals("net_exception") || data.equals("net_exception")){
+					str = "net_exception";
 				}else {
 					str = "false";
 				}

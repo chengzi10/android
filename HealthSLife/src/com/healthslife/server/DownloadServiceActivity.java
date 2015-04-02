@@ -1,5 +1,6 @@
 package com.healthslife.server;
 
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,6 +20,7 @@ import com.healthslife.sensor.utilities.CalculateUtil;
 
 public class DownloadServiceActivity extends Activity {
 
+	String str= null;
 	Context context;
 	private Handler handle = new Handler() {
 
@@ -29,8 +31,6 @@ public class DownloadServiceActivity extends Activity {
 			Log.d("handle", "into handle");
 			String result = msg.obj.toString();
 			Log.d("TAG", result);
-			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT)
-					.show();
 			if (result.equals("true")) {
 				Toast.makeText(getApplicationContext(), "下载数据成功",
 						Toast.LENGTH_SHORT).show();
@@ -38,6 +38,15 @@ public class DownloadServiceActivity extends Activity {
 				LoginRegisterGlobalVariable.login_model = 0;
 				intent.setClass(DownloadServiceActivity.this,
 						Aty_UserCenter.class);
+				startActivity(intent);
+				finish();
+			}else if (result.equals("net_exception")) {
+				Toast.makeText(getApplicationContext(), "网络异常，请查看网络设置...",
+						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent();
+				LoginRegisterGlobalVariable.login_model = 0;
+				intent.setClass(DownloadServiceActivity.this,
+						Login.class);
 				startActivity(intent);
 				finish();
 			} else {
@@ -74,8 +83,13 @@ public class DownloadServiceActivity extends Activity {
 						.downloadUserData(LoginRegisterGlobalVariable.login_name);
 				String userInfo = DownloadUserInfo
 						.downloadUserInfo(LoginRegisterGlobalVariable.login_name);
-				String str = CalculateUtil.LoginMark(
-						DownloadServiceActivity.this, userInfo, userData);
+				if(userData.equals("net_exception") || userInfo.equals("net_exception")){
+					str = "net_exception";
+				}else {
+					str = CalculateUtil.LoginMark(
+							DownloadServiceActivity.this, userInfo, userData);
+				}
+				
 				Message msg = handle.obtainMessage();
 				msg.obj = str;
 				handle.sendMessage(msg);

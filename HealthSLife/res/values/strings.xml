@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">健康S生活</string>
+    <string name="app_name">纯动</string>
     <!-- 健康模块 -->
     <string name="stepnumber">步数</string>
     <string name="energy">能量消耗</string>
@@ -29,11 +29,13 @@
     <string name="login_fail">登录失败</string>
     <string name="bundle_fail">网络异常，请验证网络</string>
     <string name="bundle_success">登录成功</string>
-    <string name="info_null">想约小雪先输入用户名和密码哦</string>
-    <string name="differ_passwd">您告诉小雪的密码不一致哦</string>
+    <string name="info_null">请输入用户名和密码</string>
+    <string name="differ_passwd">您告输入的密码不一致</string>
     <string name="short_passwd">密码不能少于6位</string>
     <string name="register_fail">注册失败</string>
     <string name="register_success">注册成功</string>
+    <string name="net_exception">网络连接异常...</string>
+    <string name="num_username">用户名不能以数字开头</string>
     <!-- 音乐服务 -->
      <string-array name="player_mode">
         <item>顺序播放</item>

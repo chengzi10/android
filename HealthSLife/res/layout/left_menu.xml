@@ -22,7 +22,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="40dp"
                 android:contentDescription="@string/image_description"
-                android:src="@drawable/loading_logo" />
+                android:src="@drawable/loading_logo4" />
             <LinearLayout 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="23dp"
                 android:textSize="20sp"
                 android:text="@string/app_name"
                 android:textStyle="bold"
@@ -46,9 +46,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="11dp"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:layout_marginTop="3dp"
-                android:text="快乐享受健康生活"
+                android:text="快乐轻松地享受生活"
                 android:textColor="#fff"
                 />
              </LinearLayout>
@@ -58,8 +58,8 @@
         <RelativeLayout
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:onClick="heart_test" >
+            android:layout_marginTop="30dp" 
+            android:onClick="heart_test">
 
             <ImageView
                 android:id="@+id/id_img1"
@@ -112,8 +112,8 @@
         <RelativeLayout
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" 
-            android:onClick="data_service" >
+            android:layout_marginTop="5dp"
+            android:onClick="data_service"  >
 
             <ImageView
                 android:id="@+id/id_img3"
@@ -138,8 +138,8 @@
         <RelativeLayout
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" 
-            android:onClick="login_register" >
+            android:layout_marginTop="5dp"
+            android:onClick="login_register"  >
 
             <ImageView
                 android:id="@+id/id_img4"

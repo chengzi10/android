@@ -79,16 +79,16 @@ public class HeightSettingActivity extends Activity {
 		});
 		
 		//返回箭头
-				ImageView backImageView = (ImageView)findViewById(R.id.backimage_in_heightsetting);
-				backImageView.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						
-						HeightSettingActivity.this.finish();
-					}
-				});
+		ImageView backImageView = (ImageView) findViewById(R.id.backimage_in_heightsetting);
+		backImageView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				HeightSettingActivity.this.finish();
+			}
+		});
 	}
 	// 刻度尺
 		private void scaleRuler(float bgvalue, final TextView nTvScale,

@@ -52,7 +52,7 @@
         </activity>
         <!-- 地图服务  -->
         <activity android:name="com.healthslife.map.MapService" >
-        </activity>
+        </activity>  
         <!-- 测心率服务 -->
         <activity android:name="com.healthslife.heartrate.XlcsActivity" >
         </activity>
@@ -61,14 +61,23 @@
         </activity>
         <activity android:name="com.healthslife.change.SetHight" >
         </activity>
-        <!--    登录注册服务        -->
+        <!--    登录注册服务       -->
         <activity android:name="com.healthslife.loginregister.Login" >
-        </activity>
+        </activity>  
  
         <activity android:name="com.healthslife.loginregister.Register" >
         </activity>
         <activity android:name="com.healthslife.change.ChangeHeadPortrait" >
         </activity>
+        
+      <!--   数据中心 -->
+        <activity android:name="com.healthslife.sensor.activity.DataAnalysisActivity" >
+        </activity>
+        
+        <!-- 积分中心 -->
+        <activity
+            android:name="com.healthslife.integralactivity.IntegralActivity"
+            ></activity>
         <!-- 人脸识别 -->
 
         <activity
@@ -261,8 +270,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.healthslife.system.ShowPictureActivity"
-            android:label="选择图片" >
+            android:name="com.healthslife.system.SummaryActivity"
+             >
         </activity>
         <activity
             android:name="com.healthslife.system.SettingActivity"

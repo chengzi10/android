@@ -2,7 +2,15 @@ package com.healthslife.sensor.data;
 
 public class SensorData {
 	
-	public static int AQI=60;//空气质量指数!!
+	public final static String FORMAT=".png";//图片默认格式
+	
+	public static String photoPath=null;//头像的保存路径!!
+	
+	public final static String DEST_DIR="/sdcard/healthSLife/userface/";//保存本地头像的目录
+	public static boolean isShowStep_DataCentre=true;//判断当前是否在显示步数!!
+	public static boolean isFromDataCentre=false;//判断是否来自数据中心
+	
+	public static int AQI=0;//空气质量指数!!
 	
 	
 	public static boolean isFirstLogin=true;
@@ -11,7 +19,9 @@ public class SensorData {
 	
 	/*用户信息表*/
 	public static boolean isLogin=false;//默认值为false（未登录）:判断是否有用户登录!!!!!!
-	public static int Aim_stepNum=10000;//目标运动步数
+	public static int Aim_stepNum=7000;//目标运动步数
+	public static int Aim_energy=200;//目标运动步数
+	
 	public final static String USERNAME="DefaultUser";//默认用户名!!!
 	public static String Username=USERNAME;//给用户名，设置默认值!!!
 	public static int height=172;//默认，身高,单位:cm
@@ -105,6 +115,62 @@ public class SensorData {
 	
 	public static int total_stepNum=0;//总累计步数,单位:步----------//share
 	
+	
+	public static int stepNum_lastFetch=0;//上次获取的步数情况!!!
+	public static int energy_lastFetch=0;//上次获取的能量情况!!!
+	public static float distance_lastFetch=0;//上次获取的距离情况!!!
+	
+	
+	
+	public static synchronized int getStepNum_lastFetch() {
+		return stepNum_lastFetch;
+	}
+	public static synchronized void setStepNum_lastFetch(int stepNum_lastFetch) {
+		SensorData.stepNum_lastFetch = stepNum_lastFetch;
+	}
+	public static synchronized int getEnergy_lastFetch() {
+		return energy_lastFetch;
+	}
+	public static synchronized void setEnergy_lastFetch(int energy_lastFetch) {
+		SensorData.energy_lastFetch = energy_lastFetch;
+	}
+	public static synchronized float getDistance_lastFetch() {
+		return distance_lastFetch;
+	}
+	public static synchronized void setDistance_lastFetch(float distance_lastFetch) {
+		SensorData.distance_lastFetch = distance_lastFetch;
+	}
+	public static synchronized int getAim_energy() {
+		return Aim_energy;
+	}
+	public static synchronized void setAim_energy(int aim_energy) {
+		Aim_energy = aim_energy;
+	}
+	public static synchronized boolean isOpenedVoice() {
+		return isOpenedVoice;
+	}
+	public static synchronized void setOpenedVoice(boolean isOpenedVoice) {
+		SensorData.isOpenedVoice = isOpenedVoice;
+	}
+	public static synchronized String getPhotoPath() {
+		return photoPath;
+	}
+	public static synchronized void setPhotoPath(String photoPath) {
+		SensorData.photoPath = photoPath;
+	}
+	public static synchronized boolean isShowStep_DataCentre() {
+		return isShowStep_DataCentre;
+	}
+	public static synchronized void setShowStep_DataCentre(
+			boolean isShowStep_DataCentre) {
+		SensorData.isShowStep_DataCentre = isShowStep_DataCentre;
+	}
+	public static synchronized boolean isFromDataCentre() {
+		return isFromDataCentre;
+	}
+	public static synchronized void setFromDataCentre(boolean isFromDataCentre) {
+		SensorData.isFromDataCentre = isFromDataCentre;
+	}
 	public static synchronized int getAQI() {
 		return AQI;
 	}

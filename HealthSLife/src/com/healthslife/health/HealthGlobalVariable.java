@@ -11,4 +11,5 @@ public class HealthGlobalVariable {
 	protected static String url;           //获取AQI时使用的URL
 	protected static SlidingMenu mLeftMenu; //左划界面
 	public static int value[] = { 0, 0, 0 }; // 数据收集模块传递的参数
+	public static int aim[] = {7000 , 200 , 0};
 }

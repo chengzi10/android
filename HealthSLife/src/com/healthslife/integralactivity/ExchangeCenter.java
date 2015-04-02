@@ -25,18 +25,19 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.healthslife.R;
+import com.healthslife.sensor.data.SensorData;
 
 public class ExchangeCenter extends Fragment {
 	private GridView gridView;
 	private ImageView sweepIV; 
 	private TextView title_text;
 	private TextView integral_text;
-	public int integral = 200;
+	public int integral = 0;
 	private int QR_WIDTH = 300, QR_HEIGHT = 300;
 	private int[] images = {R.drawable.icecream,R.drawable.jiandao,R.drawable.erji, R.drawable.shubiao, 
 			  R.drawable.jiashiqi,R.drawable.huwan,R.drawable.yinxiang, R.drawable.jishiqi,
 			R.drawable.cheng };
-	private String[] text = { "冰激凌 500积分", "随身剪套 100积分", "耳机 2000积分",
+	private String[] text = { "冰激凌 500积分", "随身剪套 1000积分", "耳机 2000积分",
 			"鼠标 3500积分", "加湿器 5300积分", "护腕 7800积分", "音响 10000积分",
 			"电子计时器 12700积分", "健康秤 31700积分" };
 	@Override
@@ -44,7 +45,7 @@ public class ExchangeCenter extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.activity_exchange, container,
 				false);
-		
+		integral=SensorData.getTotalCredits();//同步积分
 		title_text = (TextView)view.findViewById(R.id.title_text);
 		integral_text = (TextView)view.findViewById(R.id.integral_text);
 		integral_text.setText(integral + " " + "分");
@@ -74,7 +75,7 @@ public class ExchangeCenter extends Fragment {
 					exchange(integral , 500 , 0); 
 					break;
 				case 1:
-					exchange(integral , 100 , 1); 
+					exchange(integral , 1000 , 1); 
 					break;
 				case 2:
 					exchange(integral , 2000 , 2); 
@@ -115,6 +116,13 @@ public class ExchangeCenter extends Fragment {
 		return view;
 	}
 
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		integral=SensorData.getTotalCredits();//同步积分
+		super.onResume();
+	}
+	
 	public void exchange(int integral , int standard , int i) {
 		if (integral > standard) {
 			String url = text[i]; 

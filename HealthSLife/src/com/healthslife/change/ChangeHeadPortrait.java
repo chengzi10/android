@@ -146,11 +146,6 @@ public class ChangeHeadPortrait extends Activity {
 						};
 					}.start();
 				}
-				// 将data通过onActivityResult返回上一个界面
-				// if (data != null) {
-				// this.setResult(1, data);
-				// finish();
-				// }
 				// 保存截取后的图片
 				if (data != null) {
 					Bundle extras = data.getExtras();

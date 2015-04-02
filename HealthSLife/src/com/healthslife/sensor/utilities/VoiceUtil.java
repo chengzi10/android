@@ -3,6 +3,7 @@ package com.healthslife.sensor.utilities;
 import java.util.Locale;
 
 import android.app.Service;
+import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.text.format.Time;
 import android.util.Log;
@@ -10,7 +11,7 @@ import android.util.Log;
 /*工具类，提供语音功能*/
 public class VoiceUtil implements TextToSpeech.OnInitListener {
 	private static final String TAG = "VoiceUtil";
-	private Service mService;// 管理service，发送信息
+	//private Service mService;// 管理service，发送信息
 
 	private static VoiceUtil instance = null;// 管理语音功能
 
@@ -18,28 +19,29 @@ public class VoiceUtil implements TextToSpeech.OnInitListener {
 	private boolean mSpeak = true;// 判断当前是否可以语音播报，用户设置的!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!默认为打开模式!!!!!
 	private boolean mSpeakingEngineAvailable = false;// 判断当前语音引擎是否可用
 
-	private VoiceUtil() {
+	private VoiceUtil(Context context) {
+		initTTS(context);
 	}
 
-	public static VoiceUtil getInstance() {
+	public static VoiceUtil getInstance(Context context) {
 		if (instance == null) {
-			instance = new VoiceUtil();
+			instance = new VoiceUtil(context);
 		}
 		return instance;
 	}
 
-	public void setService(Service service) {
+	/*public void setService(Service service) {
 		mService = service;
-	}
+	}*/
 
 	/********** SPEAKING **********/
 
-	public void initTTS() {
+	public void initTTS(Context context) {
 		// Initialize text-to-speech. This is an asynchronous operation.
 		// The OnInitListener (second argument) is called after initialization
 		// completes.
 		Log.i(TAG, "Initializing TextToSpeech...");
-		mTts = new TextToSpeech(mService, this );// TextToSpeech.OnInitListener
+		mTts = new TextToSpeech(context, this );// TextToSpeech.OnInitListener
 	}
 
 	public void shutdownTTS() {

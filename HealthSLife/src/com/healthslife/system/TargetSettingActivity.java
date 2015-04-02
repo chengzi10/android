@@ -1,6 +1,7 @@
 package com.healthslife.system;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -9,8 +10,12 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.healthslife.R;
+import com.healthslife.sensor.dao.SportInfoDAO;
+import com.healthslife.sensor.data.SensorData;
+import com.healthslife.sensor.utilities.DBUtil;
 
 public class TargetSettingActivity extends Activity {
 
@@ -120,19 +125,48 @@ public class TargetSettingActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				TargetSettingActivity.this.finish();
+				if(stepsEditText.getText().toString().equals("")||calEditText.getText().toString().equals("")){
+					Toast.makeText(TargetSettingActivity.this, "不可以为空的哦！", Toast.LENGTH_LONG).show();
+				}else{
+					doSthing();
+				}
 			}
 		});
 	}
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		steps = Integer.parseInt(stepsEditText.getText().toString());
+		/*steps = Integer.parseInt(stepsEditText.getText().toString());
 		cal = Integer.parseInt(calEditText.getText().toString());
+		
 		UserMessage_system.setSteps(this, steps);
 		UserMessage_system.setCalories(this, cal);
 		UserMessage_system.setParameters(this);
+		SensorData.setAim_stepNum(UserMessage_system.TARGET_STEPS);//设置目标步数!
+		SensorData.setAim_energy(UserMessage_system.TARGET_CALORIES);//设置能量目标!
+		*/
+		
 		super.onDestroy();
+	}
+	
+	private void doSthing(){
+		steps = Integer.parseInt(stepsEditText.getText().toString());
+		cal = Integer.parseInt(calEditText.getText().toString());
+		
+		UserMessage_system.setSteps(TargetSettingActivity.this, steps);
+		UserMessage_system.setCalories(TargetSettingActivity.this, cal);
+		UserMessage_system.setParameters(TargetSettingActivity.this);
+		SensorData.setAim_stepNum(UserMessage_system.TARGET_STEPS);//设置目标步数!
+		SensorData.setAim_energy(UserMessage_system.TARGET_CALORIES);//设置能量目标!
+		
+		/*更新数据库*/
+		ContentValues values=new ContentValues();
+		values.put("user_aimstep", SensorData.getAim_stepNum());
+		DBUtil.update(TargetSettingActivity.this, SportInfoDAO.TABLENAME_UserInfo,
+				values, "user_name=?", new String[]{SensorData.getUsername()});
+		
+		
+		TargetSettingActivity.this.finish();
 	}
 
 }

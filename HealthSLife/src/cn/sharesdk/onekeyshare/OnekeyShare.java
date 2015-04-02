@@ -446,7 +446,7 @@ public class OnekeyShare implements PlatformActionListener, Callback {
 					}
 				}
 			}
-			data.put("shareType", shareType);
+			data.put("shareType", Platform.SHARE_IMAGE);
 
 			if (!started) {
 				started = true;

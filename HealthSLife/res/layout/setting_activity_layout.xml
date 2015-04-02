@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/back"
+            android:src="@drawable/liebiao"
             />
         <TextView
             android:layout_centerHorizontal="true"
@@ -235,12 +235,51 @@
             android:src="@drawable/jianjie"
             />
         <TextView
+            android:id="@+id/summary_textview"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:text="简介"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            />
+        
+    </LinearLayout>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="right"
+            android:background="#efeff4"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="30dp"
+            />
+    
+    
+    <LinearLayout
+        android:id="@+id/abuot_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/about_image"
+            />
+        <TextView
+            android:id="@+id/about_text_view"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:text="关于"
             android:textColor="#000000"
             android:textSize="16sp"
             android:gravity="center_vertical"
@@ -270,48 +309,13 @@
             android:src="@drawable/questionandransower"
             />
         <TextView
+            android:id="@+id/hasnew"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:text="常见问题"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:gravity="center_vertical"
-            />
-        
-    </LinearLayout>
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="right"
-            android:background="#efeff4"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="30dp"
-            />
-    <LinearLayout
-        android:id="@+id/abuot_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/about_image"
-            />
-        <TextView
-            android:id="@+id/about_text_view"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:text="关于"
+            android:text="版本更新"
             android:textColor="#000000"
             android:textSize="16sp"
             android:gravity="center_vertical"
@@ -342,4 +346,5 @@
         android:onClick="quit_btn"
         />
     </LinearLayout>
+
 </LinearLayout>

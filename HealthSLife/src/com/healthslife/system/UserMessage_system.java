@@ -6,8 +6,9 @@ import android.preference.PreferenceManager;
 
 public class UserMessage_system{
 	public static boolean SEX = true;//性别
-	public static float HEIGHT = 45.0f;//身高
-	public static float WEIGHT = 35.0f;//体重
+	public static boolean ISSPEAKEROPEN = true;//语音播报开关
+	public static float HEIGHT = 150.0f;//身高
+	public static float WEIGHT = 50.0f;//体重
 	public static int TARGET_STEPS = 7000;//目标步数
 	public static int TARGET_CALORIES = 200;//目标卡路里
 	public static int SEQUENCE = 10;//播报频率
@@ -15,8 +16,9 @@ public class UserMessage_system{
 	public static void setParameters(Context context){
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		SEX = sp.getBoolean("SEX", true);
-		HEIGHT = sp.getFloat("HEIGHT", 45.0f);
-		WEIGHT = sp.getFloat("WEIGHT", 35.0f);
+		ISSPEAKEROPEN = sp.getBoolean("ISSPEAKEROPEN", true);
+		HEIGHT = sp.getFloat("HEIGHT", 150.0f);
+		WEIGHT = sp.getFloat("WEIGHT", 50.0f);
 		TARGET_STEPS = sp.getInt("TARGET_STEPS", 7000);
 		TARGET_CALORIES = sp.getInt("TARGET_CALORIES", 200);
 		SEQUENCE = sp.getInt("SEQUENCE", 10);
@@ -79,6 +81,16 @@ public class UserMessage_system{
 		SharedPreferences.Editor editor;
 		editor = Preferences.edit();
         editor.putBoolean("SEX", sex);
+        editor.commit();
+	}
+	
+	public static void setIsspeakeropen(Context context,boolean isopen){
+		
+		SharedPreferences Preferences =
+				PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor editor;
+		editor = Preferences.edit();
+        editor.putBoolean("ISSPEAKEROPEN", isopen);
         editor.commit();
 	}
 

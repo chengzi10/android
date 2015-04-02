@@ -2,7 +2,7 @@
 <resources>
     <string name="notification_subtitle">计算步数</string><!-- Counting your steps -->
 
-	<string name="welcome">欢迎使用健康S生活，我是您的语音播报管家，很荣幸为您服务!</string><!-- 欢迎语 -->
+	<string name="welcome">Hi，我是最懂你的纯动！</string><!-- 欢迎语 -->
 
 	<string name="level_message_three">当前运动强度相对剧烈！</string>
 	<string name="level_message_two">当前运动强度适中！</string>

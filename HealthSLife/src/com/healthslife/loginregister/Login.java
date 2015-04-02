@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -43,7 +44,7 @@ public class Login extends Activity {
 	private Context context;
 	Dialog dialog;
 	Intent intent = new Intent();
-	
+	private ImageView return_btn;
 	/*
 	 * The thread of login
 	 */
@@ -69,14 +70,16 @@ public class Login extends Activity {
 				.show();
 				//往本地数据库写 null ， null
 				firstLogin();
-				
-				
 				LoginRegisterGlobalVariable.login_model = 0;
 				LoginRegisterGlobalVariable.user_login_state = true;
 				intent.setClass(Login.this, Aty_UserCenter.class);
 				//设置完后跳到个人中心界面
 				startActivity(intent);
 				finish();
+			}else if(result.equals("net_exception")) {
+				//登录失败
+				Toast.makeText(getApplicationContext(), R.string.net_exception, Toast.LENGTH_SHORT)
+				.show();
 			}else {
 				//登录失败
 				Toast.makeText(getApplicationContext(), R.string.login_fail, Toast.LENGTH_SHORT)
@@ -176,7 +179,15 @@ public class Login extends Activity {
 
 			}
 		});
-		
+		return_btn = (ImageView) findViewById(R.id.return_btn);
+		return_btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 		
 	}
 
@@ -198,41 +209,44 @@ public class Login extends Activity {
 				SoapEnvelope.VER10);
 		envelope.bodyOut = rpc;
 
-		HttpTransportSE transport = new HttpTransportSE(endPoint);
+		//HttpTransportSE transport = new HttpTransportSE(endPoint);
+		HttpTransportSE transport = new HttpTransportSE(endPoint, 5000);
 		try {
 			// 调用WebService
 			transport.call(soapAction, envelope);
+			LoginRegisterGlobalVariable.login_result = "true";
 		} catch (Exception e) {
-			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "没有连接网络，请检查网络设置", Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent(Login.this , Login.class); 
-			startActivity(intent);
-			finish();
+			//e.printStackTrace();
+			LoginRegisterGlobalVariable.login_result = "net_exception";
 		}
 
-		// 获取返回的数据
-		SoapObject object = (SoapObject) envelope.bodyIn;
-		// 获取返回的结果
-	
-		if (null == object.getProperty(0)) {
-			LoginRegisterGlobalVariable.login_result = "fail";
-		} else {
-			LoginRegisterGlobalVariable.login_result = object.getProperty(0).toString();
-		}
+		if(!LoginRegisterGlobalVariable.login_result.equals("net_exception")) {
+			// 获取返回的数据
+			SoapObject object = (SoapObject) envelope.bodyIn;
+			// 获取返回的结果
 		
+			if (null == object.getProperty(0)) {
+				LoginRegisterGlobalVariable.login_result = "fail";
+			} else {
+				LoginRegisterGlobalVariable.login_result = object.getProperty(0).toString();
+			}
+		}else {
+			return;
+		}			
 	}
 
 	public void register_btn(View v) {
 		Intent intent = new Intent(Login.this , Register.class);
 		startActivity(intent);
 	}
-	// 人脸登录
+
+/*	// 人脸登录
 	public void btn_superidlogin(View v) {
 		LoginRegisterGlobalVariable.login_model = 1;
 		SuperID.faceLogin(this);
-	}
+	}*/
 
-	// 接口返回
+	/*// 接口返回
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -274,7 +288,7 @@ public class Login extends Activity {
 			break;
 		}
 
-	}
+	}*/
 	
 	private void showDialog() {
 		View view = getLayoutInflater().inflate(R.layout.down_data_dialog,
@@ -315,11 +329,9 @@ public class Login extends Activity {
 			startActivity(intent);
 			finish();
 			//如果下载失败由用户选择是否重新下载（弹出对话框）
-			
 			break;
 		case R.id.not_down_data:
 			//不下载数据（传参数null,null）
-			
 			//清空所有数据，除用户名和密码之外!!
 			firstLogin();
 			
@@ -330,6 +342,7 @@ public class Login extends Activity {
 			finish();
 			break;
 		default:
+			finish();
 			break;
 		}
 	}

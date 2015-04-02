@@ -47,6 +47,9 @@ public class Register extends Activity {
 				intent.setClass(Register.this, Login.class);
 				startActivity(intent);
 				finish();
+			} else if (result.equals("net_exception")) {
+				Toast.makeText(getApplicationContext(), R.string.net_exception,
+						Toast.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(getApplicationContext(), R.string.register_fail,
 						Toast.LENGTH_SHORT).show();
@@ -59,7 +62,7 @@ public class Register extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
+		requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
 		setContentView(R.layout.register);
 		/*
 		 * normal login style
@@ -106,6 +109,16 @@ public class Register extends Activity {
 							R.string.differ_passwd, Toast.LENGTH_SHORT).show();
 					return;
 				}
+				if (0 < LoginRegisterGlobalVariable.register_name.toString()
+						.charAt(0)
+						&& LoginRegisterGlobalVariable.register_name.toString()
+								.charAt(0) < 9) {
+					YoYo.with(Techniques.Shake).duration(700)
+							.playOn(findViewById(R.id.input_area));
+					Toast.makeText(getApplicationContext(),
+							R.string.num_username, Toast.LENGTH_SHORT).show();
+					return;
+				}
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -119,12 +132,18 @@ public class Register extends Activity {
 					}
 
 				}).start();
-				
+
 			}
 		});
 
 	}
-
+	//返回登陆界面
+	public void return_login_btn(View v) {
+		Intent intent = new Intent(Register.this , Login.class);
+		startActivity(intent);
+		finish();
+	}
+	
 	public void register(String name, String passwd) {
 
 		String methodName = "register"; // login method name
@@ -144,23 +163,28 @@ public class Register extends Activity {
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER10);
 		envelope.bodyOut = rpc;
-
-		HttpTransportSE transport = new HttpTransportSE(endPoint);
+		// 设置超时时间，处理网络连接异常
+		HttpTransportSE transport = new HttpTransportSE(endPoint, 5000);
 		try {
 			// 调用WebService
 			transport.call(soapAction, envelope);
+			LoginRegisterGlobalVariable.register_result = "true";
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			LoginRegisterGlobalVariable.register_result = "net_exception";
 		}
 
-		// 获取返回的数据
-		SoapObject object = (SoapObject) envelope.bodyIn;
-		// 获取返回的结果
-		if (null == object.getProperty(0)) {
-			LoginRegisterGlobalVariable.register_result = "fail";
-		} else {
-			LoginRegisterGlobalVariable.register_result = object.getProperty(0)
-					.toString();
+		if (!LoginRegisterGlobalVariable.register_result
+				.equals("net_exception")) {
+			// 获取返回的数据
+			SoapObject object = (SoapObject) envelope.bodyIn;
+			// 获取返回的结果
+			if (null == object.getProperty(0)) {
+				LoginRegisterGlobalVariable.register_result = "fail";
+			} else {
+				LoginRegisterGlobalVariable.register_result = object
+						.getProperty(0).toString();
+			}
 		}
 	}
 }

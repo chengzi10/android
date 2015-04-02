@@ -81,8 +81,8 @@ public class WeightSettingActivity extends Activity {
 				// TODO Auto-generated method stub
 				if(SensorData.isFirstUse) {
 					int user_sex=SettingActivity.sex?1:0;//性别
-					int user_high=(int) SettingActivity.height;//体重
-					int user_weight=(int) SettingActivity.weight;//身高
+					int user_high=(int) SettingActivity.height;//身高
+					int user_weight=(int) SettingActivity.weight;//体重
 					int user_aimstep=7000;//默认目标步行数目
 					int user_islogin=0;//用户登录状态
 					ContentValues values=new ContentValues();
@@ -118,11 +118,19 @@ public class WeightSettingActivity extends Activity {
 					
 					//#########################################需要加数据!!!
 					int user_sex=SettingActivity.sex?1:0;//性别
-					int user_weight=(int) SettingActivity.height;//体重
-					int user_high=(int) SettingActivity.weight;//身高
+					int user_weight=(int) SettingActivity.weight;//体重
+					int user_high=(int) SettingActivity.height;//身高
 					SensorData.setGender(user_sex);
 				 	SensorData.setWeight(user_weight);
 				 	SensorData.setHeight(user_high);
+				 	
+				 	ContentValues values=new ContentValues();
+				 	values.put("user_sex", user_sex);
+				 	values.put("user_weight", user_weight);
+				 	values.put("user_high", user_high);
+				 	DBUtil.update(WeightSettingActivity.this, SportInfoDAO.TABLENAME_UserInfo, 
+				 			values, "user_name=?", new String[]{SensorData.getUsername()});
+				 	
 				}
 			}
 		});

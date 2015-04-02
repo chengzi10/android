@@ -73,7 +73,8 @@ public class DownloadUserData {
 		String methodName = "downUserDataStr"; // login method name
 		String endPoint = ServiceGlobalVariable.serverUrl+"DownUserDataService"; // EndPoint
 		String soapAction =ServiceGlobalVariable.downloadNameSpace+"/downUserDataStr"; // SOAP
-																					// Action
+		
+		String info = null;// Action
 
 		// 指定WebService的命名空间和调用的方法名
 		SoapObject rpc = new SoapObject(ServiceGlobalVariable.downloadNameSpace,
@@ -86,18 +87,23 @@ public class DownloadUserData {
 				SoapEnvelope.VER10);
 		envelope.bodyOut = rpc;
 
-		HttpTransportSE transport = new HttpTransportSE(endPoint);
+		HttpTransportSE transport = new HttpTransportSE(endPoint,10000);
 		try {
 			// 调用WebService
 			transport.call(soapAction, envelope);
+			info = "no_exception";
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			info = "net_exception";
 		}
 
-		// 获取返回的数据
-		SoapObject object = (SoapObject) envelope.bodyIn;
-		// 获取返回的结果
-		String info = object.getProperty(0).toString();
+		if(!info.equals("net_exception")) {
+			// 获取返回的数据
+			SoapObject object = (SoapObject) envelope.bodyIn;
+			// 获取返回的结果
+			info = object.getProperty(0).toString();
+		}
+		
 		return info;
 	}
 	

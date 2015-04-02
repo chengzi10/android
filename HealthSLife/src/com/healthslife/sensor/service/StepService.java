@@ -96,9 +96,9 @@ public class StepService extends Service {
         mPedometerSettings = new PedometerSettingUtil(mSettings);
         mState = getSharedPreferences("state", 0);
 
-        mUtils = VoiceUtil.getInstance();
-        mUtils.setService(this);
-        mUtils.initTTS();
+        mUtils = VoiceUtil.getInstance(StepService.this);
+        //mUtils.setService(this);
+        //mUtils.initTTS();
 
         acquireWakeLock();
         

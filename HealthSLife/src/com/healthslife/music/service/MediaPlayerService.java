@@ -39,6 +39,7 @@ import com.healthslife.music.data.SystemSetting;
 import com.healthslife.music.entity.Song;
 import com.healthslife.music.util.Common;
 import com.healthslife.music.widget.MusicKnowWidget;
+import com.healthslife.sensor.data.SensorData;
 
 public class MediaPlayerService extends Service {
 	
@@ -1239,8 +1240,8 @@ public class MediaPlayerService extends Service {
 				@Override
 				public void handleMessage(Message msg) {
 					if (msg.what==0x1233) {
-						strenth = new Random().nextInt(3);
-						level = strenth+1;
+						strenth = SensorData.getLevel();
+						level = strenth;
 						List<Song> list_intelligent = songDao.searchLevel(level);
 						doPlayerSequence(action, isPlayer, list_intelligent);
 						super.handleMessage(msg);

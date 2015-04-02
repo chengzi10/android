@@ -113,8 +113,8 @@
 	<WechatFavorite
         Id="6"
         SortId="6"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wx13128237ae135b9d"
+        AppSecret="86a3a478633b90ba07dc864db79cb476"
         Enable="true" />
     
 	<!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->

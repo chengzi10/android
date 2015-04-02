@@ -13,11 +13,13 @@
      <TextView 
             android:text="@string/song_title" 
             android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="#ffff"/>
         
         <TextView android:id="@+id/tv_song_title"
             android:layout_width="fill_parent" 
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+             android:textColor="#ffff"/>
     </LinearLayout>
     
      <LinearLayout
@@ -28,10 +30,12 @@
     >
         <TextView 
             android:text="@string/song_artist" 
+             android:textColor="#ffff"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"/>
         
         <TextView  android:id="@+id/tv_song_artist"
+             android:textColor="#ffff"
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -43,10 +47,12 @@
     >
         <TextView 
             android:text="@string/song_album" 
+             android:textColor="#ffff"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"/>
         
         <TextView android:id="@+id/tv_song_album"
+             android:textColor="#ffff"
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -58,10 +64,12 @@
     >
         <TextView 
             android:text="@string/song_format" 
+             android:textColor="#ffff"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"/>
         
         <TextView  android:id="@+id/tv_song_format"
+             android:textColor="#ffff"
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -73,10 +81,12 @@
     >
         <TextView 
             android:text="@string/song_duration" 
+             android:textColor="#ffff"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"/>
         
         <TextView android:id="@+id/tv_song_duration"
+             android:textColor="#ffff"
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -88,10 +98,12 @@
     >
         <TextView 
             android:text="@string/song_size" 
+             android:textColor="#ffff"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"/>
         
         <TextView  android:id="@+id/tv_song_size"
+             android:textColor="#ffff"
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -104,11 +116,13 @@
     >
         <TextView 
             android:text="@string/song_path" 
+             android:textColor="#ffff"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"/>
         
         <TextView  
             android:id="@+id/tv_song_filepath"
+             android:textColor="#ffff"
             android:singleLine="false"
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content"/>

@@ -23,7 +23,8 @@ public class SportInfoDAO {
 //	public static final String TABLENAME_Rank="rank_table";//数据库表名
 //	public static final String TABLENAME_UserRegister="user_register";//数据库表名--注册表
 	public static final String TABLENAME_UserInfo="user_info";//数据库表名--用户信息表
-	public static String TABLENAME_UserSportData=SensorData.Username;//数据库表名--用户运动数据表#####不能设置为final因为表名为用户名!!!
+	public static final String TABLENAME_UserMap="user_map";//数据库表名--用户地图轨迹
+	//public static String TABLENAME_UserSportData=SensorData.Username;//数据库表名--用户运动数据表#####不能设置为final因为表名为用户名!!!
 //	public static final String TABLENAME_UserGoal="user_goal";//数据库表名--用户运动数据目标表
 //	public final static int TABLETPYE_TRAFFIC=1;
 //	public final static int TABLETPYE_RANK=2;
@@ -79,6 +80,8 @@ public class SportInfoDAO {
 		boolean isSuccess=true;
 		dbOpenHelper=new DBOpenHelper(contxt,DBNAME);
 		db=dbOpenHelper.getWritableDatabase();
+		dbOpenHelper.createTable(db);//先创建数据库!!!!!!!!!!!!（不存在数据表时）
+		
 		try{
 			db.execSQL("ALTER TABLE "+tableName+" RENAME TO "+newTableName);
 			//update sqlite_sequence SET seq = 0 where name ='TableName'
@@ -113,6 +116,8 @@ public class SportInfoDAO {
 		boolean isSuccess=false;
 		dbOpenHelper=new DBOpenHelper(contxt,DBNAME);
 		db=dbOpenHelper.getWritableDatabase();
+		dbOpenHelper.createTable(db);//先创建数据库!!!!!!!!!!!!（不存在数据表时）
+		
 		long rowid=db.insert(tableName, null, values);
 		if(rowid==-1){
 			isSuccess=false;
@@ -131,6 +136,8 @@ public class SportInfoDAO {
 		boolean isSuccess=false;
 		dbOpenHelper=new DBOpenHelper(contxt,DBNAME);
 		db=dbOpenHelper.getWritableDatabase();
+		dbOpenHelper.createTable(db);//先创建数据库!!!!!!!!!!!!（不存在数据表时）
+		
 		int num=db.update(tableName, values, whereClause, whereArgs);
 		if(num==0){
 			System.out.println("更新数据失败--->"+contxt.getClass());
@@ -154,6 +161,8 @@ public class SportInfoDAO {
 	public Cursor query(String sql,String[] args){
 		dbOpenHelper=new DBOpenHelper(contxt,DBNAME);
 		db=dbOpenHelper.getReadableDatabase();
+		dbOpenHelper.createTable(db);//先创建数据库!!!!!!!!!!!!（不存在数据表时）
+		
 		Cursor cursor=db.rawQuery(sql, args);
 		return cursor;		
 	}

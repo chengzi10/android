@@ -628,7 +628,6 @@ public class SongDao {
 						.getColumnIndex(DBData.SONG_FILEPATH)));
 				song.setDurationTime(cr.getInt(cr
 						.getColumnIndex(DBData.SONG_DURATIONTIME)));
-				song.setLevel(cr.getInt(cr.getColumnIndex(DBData.SONG_LEVEL)));
 				list.add(song);
 			}
 		}

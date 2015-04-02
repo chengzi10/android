@@ -1,5 +1,9 @@
 package com.healthslife.sensor.utilities;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,14 +11,116 @@ import java.util.Date;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
-import com.healthslife.loginregister.LoginRegisterGlobalVariable;
 import com.healthslife.sensor.dao.SportInfoDAO;
 import com.healthslife.sensor.data.SensorData;
 import com.healthslife.sensor.mode.SportData;
 
 public class CalculateUtil {
 	
+	/*判断该用户的头像是否存在*/
+	public static boolean isUserFaceEXist(){
+		boolean isExist=false;
+		File f=new File(SensorData.DEST_DIR+SensorData.getUsername()+SensorData.FORMAT);
+		if(f.exists()){
+			isExist=true;
+		}
+		return isExist;
+	}
+	
+	
+	/*获取当前用户头像路径，及创建用户头像父目录*/
+	public static String getUserFacePath(){
+		String dir=SensorData.DEST_DIR+SensorData.getUsername()+SensorData.FORMAT;
+		if(createDirFile(dir)){
+			System.out.println("%%%用户头像目录创建【成功】!!");
+		}else{
+			System.out.println("%%%用户头像目录创建【失败】!!");
+		}
+		return dir;
+	}
+	
+	/*创建文件目录:参数为带目录的文件名*/
+	/*返回目录存在情况*/
+	public static boolean createDirFile(String dir){
+		boolean isSuccess=false;
+		File f=new File(dir);
+		/*父目录不为空，且还未创建时，须创建*/
+		if(f.getParentFile()!=null&&!f.getParentFile().exists()){
+			if(f.getParentFile().mkdirs()){
+				isSuccess=true;
+			}
+		}else{
+			isSuccess=true;
+		}
+		return isSuccess;
+	}
+
+	
+	
+	/*从本地读取图片到视图*/
+	public static Bitmap getDiskBitmap(String pathString){  
+	    Bitmap bitmap = null;  
+	    try{  
+	        File file = new File(pathString);  
+	        if(!file.exists()){  
+	        	file.createNewFile(); 
+	        } 
+	        bitmap = BitmapFactory.decodeFile(pathString);
+	    } catch (Exception e){  
+	        System.out.println("%%%%%%%加载图片失败:"+e.getCause());
+	    }  
+	    return bitmap;  
+	}  
+
+	/*保存Bitmap成图片*/
+	public static void saveBitmapToImage(Context context,Bitmap b, String strFileName) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(strFileName);
+            if (null != fos) {
+                boolean success= b.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                fos.flush();
+                fos.close();
+                if(success)
+                Toast.makeText(context, "截屏成功", Toast.LENGTH_SHORT).show();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
+	
+	/*读取图片并保存*/
+	/*void saveImageToImage(String srcFilePath,String destDir){
+		//读取图片
+		File in_image = new File(srcFilePath);
+		BufferedImage bi = null;
+		try {
+		    bi = ImageIO.read(in_image);
+		} catch (IOException e) {
+		    System.out.println("%%%%%读取图片失败:"+e.getCause());//测试!!!
+		}
+
+		String format=srcFilePath.substring(srcFilePath.lastIndexOf(".")+1, 
+				srcFilePath.length());//获取图片格式!!!
+		
+		//保存图片---以用户名加原始图片的后缀为保存头像的格式!!!
+		SensorData.setPhotoPath(destDir+SensorData.getUsername()+"."+format);
+		File out_image = new File(SensorData.getPhotoPath());
+		try {
+			ImageIO.write(bi, format, out_image);
+		} catch (IOException e) {
+			System.out.println("$$$$$$保存图片失败:"+e.getCause());//测试!!!
+		}
+		System.out.println("保存成功!");
+	}
+	*/
 	
 	/*上传info信息*///需要更新整个界面的数据!!!!!!
 	public static String UploadInfo(Context context){
@@ -45,8 +151,8 @@ public class CalculateUtil {
 	public static String UploadSportData(Context context){
 		String data="";//数据
 		SportInfoDAO dao=new SportInfoDAO(context);
-		SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();
-		Cursor c=dao.query("select * from "+SportInfoDAO.TABLENAME_UserSportData+" where user_isupload=0", null);//查询未上传的数据//user_isupload=0
+		//SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();
+		Cursor c=dao.query("select * from "+SensorData.getUsername()+" where user_isupload=0", null);//查询未上传的数据//user_isupload=0
 		while(c.moveToNext()) {  
 			 data+=c.getString(c.getColumnIndex("user_date"));
 			 data+="@"+c.getInt(c.getColumnIndex("user_step"));
@@ -55,7 +161,7 @@ public class CalculateUtil {
 			 data+="@"+c.getInt(c.getColumnIndex("user_total_step"));
 			 data+="@"+c.getInt(c.getColumnIndex("user_total_credits"))+"#";
 	    } 
-		boolean isDelete=DBUtil.dropTable(context, SportInfoDAO.TABLENAME_UserSportData);//删除表
+		boolean isDelete=DBUtil.dropTable(context, SensorData.getUsername());//删除表
 		if(!isDelete){
 			System.out.println("-------------------删除数据库表【失败】!!");//测试!!!!!!!!!!!!!!!!!!
 		}else{
@@ -89,6 +195,7 @@ public class CalculateUtil {
 		
 		SportInfoDAO dao=new SportInfoDAO(context);
 		Cursor c=dao.query("select * from "+SportInfoDAO.TABLENAME_UserInfo+" where 1=1", null);//查询
+		
 		int id=-1;
 		 while(c.moveToNext()) {  
 			 id=c.getInt(c.getColumnIndex("id"));
@@ -137,14 +244,43 @@ public class CalculateUtil {
 			values.put("user_total_step", user_total_step);
 			values.put("user_total_credits", user_total_credits);
 			values.put("user_isupload", user_isupload);
-			boolean isExist=DBUtil.update(context, SportInfoDAO.TABLENAME_UserSportData, 
+			
+			//SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();
+			//SensorData.setUsername(user_name);
+			boolean isExist=DBUtil.update(context, SensorData.getUsername(), 
 					values, "user_date=?", new String[]{user_date});
 			if(!isExist){
-				isSuccess3&=DBUtil.insert(context, SportInfoDAO.TABLENAME_UserSportData, values);
+				isSuccess3&=DBUtil.insert(context, SensorData.getUsername(), values);
 			}
-			
-			
 		}
+		
+		
+		/*初始化当天运动数据*///String类型查询，不能直接赋值判断，应该加引号或使用替代符号!!!!!
+		SportInfoDAO initdao=new SportInfoDAO(context);
+		Cursor initc=initdao.query("select * from "+SensorData.getUsername()+" where user_date=?",
+							new String[]{GetNowTime()});
+		while(initc.moveToNext()){
+			SensorData.setStepNum(initc.getInt(initc.getColumnIndex("user_step")));
+			SensorData.setStepNum_lastRefresh(initc.getInt(initc.getColumnIndex("user_step")));
+			SensorData.setStepNum_lastSpeak(initc.getInt(initc.getColumnIndex("user_step")));
+			SensorData.setStepNum_old(initc.getInt(initc.getColumnIndex("user_step")));
+			SensorData.setDistance(initc.getFloat(initc.getColumnIndex("user_distance")));
+			SensorData.setDistance_old(initc.getFloat(initc.getColumnIndex("user_distance")));
+			SensorData.setEnergy(initc.getInt(initc.getColumnIndex("user_energy")));
+			SensorData.setTotal_stepNum(initc.getInt(initc.getColumnIndex("user_total_step")));
+			SensorData.setTotalCredits(initc.getInt(initc.getColumnIndex("user_total_credits")));
+		}
+		initc.close();
+		initdao.closeDB();
+		System.out.println("%%%%%%%%%%%%%%%%%%%%%数据下载后:\n当天步数:"+SensorData.getStepNum()
+				+"\n当天距离:"+SensorData.getDistance()
+				+"\n累计步数:"+SensorData.getTotal_stepNum()
+				+"\n累计积分:"+SensorData.getTotalCredits());//测试!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		
+		
+		
+		
 		String message="true";
 		if(!(isSuccess1&isSuccess2&isSuccess3)){
 			message="false";
@@ -182,8 +318,8 @@ public class CalculateUtil {
 	/*定时刷新数据库:包括每天零点当天数据清零*/
 	public static void RefreshTable(Context context){
 		String nowTime=GetNowTime();//获取系统当前日期!!
-		SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();//用户名即表名!
-		SportData sportData=DBUtil.query(context, "select * from "+SportInfoDAO.TABLENAME_UserSportData
+		//SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();//用户名即表名!
+		SportData sportData=DBUtil.query(context, "select * from "+SensorData.getUsername()
 				+" where user_date='"+nowTime+"'",null);//搜索当天数据，如果没有数据，则重置当天数据；如果有，则读取当前数据!!
 		if(sportData.getUser_date()!=null){//当天有数据:更新操作!!
 			ContentValues values=new ContentValues();
@@ -194,7 +330,7 @@ public class CalculateUtil {
 			values.put("user_total_step", SensorData.getTotal_stepNum());
 			values.put("user_total_credits", SensorData.getTotalCredits());
 			values.put("user_isupload", 0);//默认设置为“0”，表示未上传!
-			DBUtil.update(context, SportInfoDAO.TABLENAME_UserSportData, values, "user_date=?", new String[]{nowTime});
+			DBUtil.update(context, SensorData.getUsername(), values, "user_date=?", new String[]{nowTime});
 		}else{//当天无数据:插入操作（将今天数据清空并插入一条清零数据）!!!
 			ContentValues values=new ContentValues();
 			values.put("user_date", nowTime);
@@ -204,7 +340,7 @@ public class CalculateUtil {
 			values.put("user_total_step", SensorData.getTotal_stepNum()-SensorData.getStepNum());
 			values.put("user_total_credits", SensorData.getTotalCredits());
 			values.put("user_isupload", 0);//默认设置为“0”，表示未上传!
-			DBUtil.insert(context, SportInfoDAO.TABLENAME_UserSportData, values);
+			DBUtil.insert(context, SensorData.getUsername(), values);
 			
 			/*清零*/
 			SensorData.setStepNum(0);
@@ -231,8 +367,8 @@ public class CalculateUtil {
 	/*初始化所有参数:从数据库读取*/
 	public static void initALL(Context context){
 		String nowTime=GetNowTime();//获取系统当前日期!!
-		SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();//用户名即表名!
-		SportData sportData=DBUtil.query(context, "select * from "+SportInfoDAO.TABLENAME_UserSportData
+		//SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();//用户名即表名!
+		SportData sportData=DBUtil.query(context, "select * from "+SensorData.getUsername()
 				+" where user_date='"+nowTime+"'",null);//搜索当天数据，如果没有数据，则重置当天数据；如果有，则读取当前数据!!
 		if(sportData.getUser_date()!=null){//有数据:读取当前数据!!
 			SensorData.setStepNum(sportData.getUser_step());//步数

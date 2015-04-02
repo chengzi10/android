@@ -10,10 +10,12 @@ import org.jsoup.select.Elements;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -26,6 +28,8 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import cn.jpush.android.api.JPushInterface;
 
@@ -36,19 +40,24 @@ import com.healthslife.allinterface.SlidingMenu;
 import com.healthslife.heartrate.XlcsActivity;
 import com.healthslife.loginregister.Aty_UserCenter;
 import com.healthslife.loginregister.Login;
-import com.healthslife.loginregister.LoginRegisterGlobalVariable;
 import com.healthslife.map.MapGlobalVariable;
 import com.healthslife.map.MapService;
 import com.healthslife.music.activity.ListMainActivity;
+import com.healthslife.sensor.activity.DataAnalysisActivity;
+import com.healthslife.sensor.dao.SportInfoDAO;
 import com.healthslife.sensor.data.SensorData;
 import com.healthslife.sensor.service.StepService;
 import com.healthslife.sensor.utilities.CalculateUtil;
 import com.healthslife.sensor.utilities.PedometerSettingUtil;
 import com.healthslife.sensor.utilities.VoiceUtil;
+import com.healthslife.system.UserMessage_system;
 
 public class HealthServiceActivity extends Activity {
 
-	private static boolean isExit = false;  // 设置退出判断参数
+	private ImageView sound_btn;
+	private TextView text_view;
+	private ImageView to_navige_btn;
+	private static boolean isExit = false; // 设置退出判断参数
 	private SharedPreferences mSettings;// 参数设置
 	private PedometerSettingUtil mPedometerSettings;// 参数设置
 	private VoiceUtil voiceUtil;// 语音工具设置
@@ -71,7 +80,7 @@ public class HealthServiceActivity extends Activity {
 	 */
 	private boolean mIsRunning;// 判断监听步数的service是否还在运行
 
-	private int aim[] = { 5000, 200, 0 }; // 设置模块传递的用户设置目标
+	//private int aim[] = { 5000, 200, 0 }; // 设置模块传递的用户设置目标
 	DatabaseHelper healthDatabaseHelper = new DatabaseHelper(this);
 
 	ImageButton stepnumber_btn;
@@ -85,6 +94,8 @@ public class HealthServiceActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
 		setContentView(R.layout.health_service);
 
+		HealthGlobalVariable.mLeftMenu = (SlidingMenu) findViewById(R.id.id_menu);
+		
 		JPushInterface.setDebugMode(false);
 		JPushInterface.init(this);
 
@@ -98,20 +109,26 @@ public class HealthServiceActivity extends Activity {
 		MonitoringFechAQI fechAQI = new MonitoringFechAQI();
 		Thread fechAQI_t = new Thread(fechAQI);
 
-		/* 语音播报 */
-		voiceUtil = VoiceUtil.getInstance();
-		// MonitoringSpeak speak=new MonitoringSpeak();
-		// Thread speak_t=new Thread(speak);
+		
 		/* 启动监听功能步数变化 */
 		MonitoringAVGSpeed moving = new MonitoringAVGSpeed();
 		Thread moving_t = new Thread(moving);
 		/* 监听跑步时间 */
 		MonitoringRunningTime runningTime = new MonitoringRunningTime();
 		Thread runningTime_t = new Thread(runningTime);
+		
+		/* 语音播报 */
+		voiceUtil = VoiceUtil.getInstance(HealthServiceActivity.this);//获取语音实例
+		MonitoringSpeak speak=new MonitoringSpeak();
+		Thread speak_t=new Thread(speak);
 		/* 判断是否在语音播报：当语音播报时，暂停音乐播放，语音播报结束，再继续播放!!! */
-		// MonitoringIsSpeaking isSpeaking=new MonitoringIsSpeaking();
-		// Thread isSpeaking_t=new Thread(isSpeaking);
-
+		MonitoringIsSpeaking isSpeaking=new MonitoringIsSpeaking();
+		Thread isSpeaking_t=new Thread(isSpeaking);
+		/* 监听打开关闭语音功能!!! */
+		MonitoringControlSpeaking controlSpeaking=new MonitoringControlSpeaking();
+		Thread controlSpeaking_t=new Thread(isSpeaking);
+		
+		
 		/* 每隔一定时间(0.5s)，把该条数据更新到本地数据库！ */
 		MonitoringRefreshTable refreshTable = new MonitoringRefreshTable();
 		Thread refreshTable_t = new Thread(refreshTable);
@@ -119,14 +136,16 @@ public class HealthServiceActivity extends Activity {
 		fechAQI_t.start();
 		runningTime_t.start();
 		moving_t.start();
-		// speak_t.start();
-		// isSpeaking_t.start();
+		controlSpeaking_t.start();
+		speak_t.start();
+		isSpeaking_t.start();
 		refreshTable_t.start();
 
 		stepnumber_btn = (ImageButton) findViewById(R.id.stepnumber_btn);
 		energy_btn = (ImageButton) findViewById(R.id.energy_btn);
 		aqi_btn = (ImageButton) findViewById(R.id.aqi_btn);
-
+		text_view = (TextView) findViewById(R.id.text_view);
+		
 		HealthGlobalVariable.circleBar = (CircleBar) findViewById(R.id.circle_bar);
 
 		HealthGlobalVariable.circleBar
@@ -134,25 +153,27 @@ public class HealthServiceActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						// if (2 == HealthGlobalVariable.model) {
-						// HealthGlobalVariable.value[2] =
-						// HealthGlobalVariable.newAqi;
-						// if (0 == HealthGlobalVariable.newAqi) {
-						// Toast.makeText(getApplicationContext(),
-						// "亲，获取空气质量失败，看看窗外吧", Toast.LENGTH_SHORT)
-						// .show();
-						// }
-						// }
+						if (2 == HealthGlobalVariable.model) {
+							HealthGlobalVariable.value[2] = HealthGlobalVariable.newAqi;
+							if (0 == HealthGlobalVariable.newAqi) {
+								Toast.makeText(getApplicationContext(),
+										"亲，获取空气质量失败，看看窗外吧", Toast.LENGTH_SHORT)
+										.show();
+							}
+						}
 
 						if (HealthGlobalVariable.model > 1) {
 							HealthGlobalVariable.model = 0;
 						} else {
 							HealthGlobalVariable.model++;
 						}
+						HealthGlobalVariable.aim[0] = SensorData.getAim_stepNum();
+						HealthGlobalVariable.aim[1] = SensorData.getAim_energy();
 						HealthGlobalVariable.circleBar
 								.update(HealthGlobalVariable.value[HealthGlobalVariable.model],
 										200, HealthGlobalVariable.model,
-										aim[HealthGlobalVariable.model]); // 将参数传递到Circlebar中
+										HealthGlobalVariable.aim[HealthGlobalVariable.model]); // 将参数传递到Circlebar中
+						
 						if (0 == HealthGlobalVariable.model) {
 							stepnumber_btn.setImageDrawable(getResources()
 									.getDrawable(R.drawable.walking_press));
@@ -160,6 +181,7 @@ public class HealthServiceActivity extends Activity {
 									.getDrawable(R.drawable.kaluli_normal2));
 							aqi_btn.setImageDrawable(getResources()
 									.getDrawable(R.drawable.quality_normal));
+							text_view.setText("您当前运动" +HealthGlobalVariable.value[0] + "步");
 						} else if (1 == HealthGlobalVariable.model) {
 							stepnumber_btn.setImageDrawable(getResources()
 									.getDrawable(R.drawable.walking_normal));
@@ -167,6 +189,7 @@ public class HealthServiceActivity extends Activity {
 									.getDrawable(R.drawable.kaluli_press));
 							aqi_btn.setImageDrawable(getResources()
 									.getDrawable(R.drawable.quality_normal));
+							text_view.setText("您当前消耗能量" +HealthGlobalVariable.value[1] + "KCal");
 						} else if (2 == HealthGlobalVariable.model) {
 							stepnumber_btn.setImageDrawable(getResources()
 									.getDrawable(R.drawable.walking_normal));
@@ -174,17 +197,31 @@ public class HealthServiceActivity extends Activity {
 									.getDrawable(R.drawable.kaluli_normal2));
 							aqi_btn.setImageDrawable(getResources()
 									.getDrawable(R.drawable.quality_press));
+							if (0 == HealthGlobalVariable.newAqi) {
+								text_view.setText("获取空气质量失败...");
+							}else {
+								
+								text_view.setText("当前AQI指数" +HealthGlobalVariable.value[2]);
+							}
+							
 						}
 					}
 
 				});
 
-		HealthGlobalVariable.mLeftMenu = (SlidingMenu) findViewById(R.id.id_menu);
+		
 		/*
 		 * 获取欢迎界面传来的城市名称
 		 */
-		Toast.makeText(getApplicationContext(),
-				"您现在位于" + MapGlobalVariable.city, Toast.LENGTH_SHORT).show();
+		if (null != MapGlobalVariable.city) {
+			Toast.makeText(getApplicationContext(),
+					"您现在位于" + MapGlobalVariable.city, Toast.LENGTH_SHORT)
+					.show();
+		} else {
+			Toast.makeText(getApplicationContext(), "网络异常，定位失败...",
+					Toast.LENGTH_SHORT).show();
+		}
+
 		// 执行获取AQI的线程
 		/*
 		 * CountAirQuality airQuality = new CountAirQuality();
@@ -204,6 +241,49 @@ public class HealthServiceActivity extends Activity {
 
 		});
 
+		to_navige_btn = (ImageView)findViewById(R.id.to_navige_btn);
+		to_navige_btn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				HealthGlobalVariable.mLeftMenu.toggle();
+			}
+
+		});
+		
+		//语音播报控制按钮
+		sound_btn = (ImageView) findViewById(R.id.sound_btn);
+		sound_btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				voiceUtil.setSpeak(UserMessage_system.ISSPEAKEROPEN);//判断当前语音开关状态!!
+				// 点击控制声音开关
+				String message = "您已经走了" + SensorData.getStepNum()
+						+ "步，相当于" + SensorData.getDistance() + "公里，"
+						+ "消耗了" + SensorData.getEnergy() + "卡路里！";
+				//System.out.println(message);
+				// SensorData.setSpeaking(true);//开始语音播报!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				voiceUtil.say(message);// !!!~!!!!!!!!!!!!!!!!!!!
+
+				String levelMessage = "";
+				if (SensorData.getMoveHZ() < SensorData.LEVEL_DOWN) {// 步频90以下，运动强度等级为LEVEL_ONE
+					levelMessage = getString(R.string.level_message_one);// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				} else if (SensorData.getMoveHZ() >= SensorData.LEVEL_DOWN
+						&& SensorData.getMoveHZ() <= SensorData.LEVEL_UP) {// 步频在90和240之间，运动强度等级为LEVEL_TWO
+					levelMessage = getString(R.string.level_message_two);// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				} else {// 步频在240之上，运动强度等级为LEVEL_THREE
+					levelMessage = getString(R.string.level_message_three);// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				}
+				voiceUtil.say("平均每分钟运动" + SensorData.getMoveHZ()
+						+ "步," + levelMessage);// !!!!!!!!!!!!!!!!!!!!!
+				voiceUtil.say(CalculateUtil
+						.GetRunningTimeByString(SensorData
+								.getRunning_Time()));// !!!!!!!!!!
+				
+				
+			}
+		});
 	}
 
 	/*
@@ -225,10 +305,10 @@ public class HealthServiceActivity extends Activity {
 	 * 跳转到数据中心
 	 */
 	public void data_service(View v) {
-		if (false == LoginRegisterGlobalVariable.user_login_state) {
+		if (!SensorData.isLogin()) {
 			startActivity(new Intent(HealthServiceActivity.this, Login.class));
 		} else {
-			startActivity(new Intent(HealthServiceActivity.this, Login.class));
+			startActivity(new Intent(HealthServiceActivity.this, DataAnalysisActivity.class));
 		}
 	}
 
@@ -236,7 +316,7 @@ public class HealthServiceActivity extends Activity {
 	 * 跳转到登录界面
 	 */
 	public void login_register(View v) {
-		if (SensorData.isLogin()) {
+		if (!SensorData.isLogin()) {
 			startActivity(new Intent(HealthServiceActivity.this, Login.class));
 		} else {
 			startActivity(new Intent(HealthServiceActivity.this,
@@ -261,7 +341,8 @@ public class HealthServiceActivity extends Activity {
 		aqi_btn.setImageDrawable(getResources().getDrawable(
 				R.drawable.quality_normal));
 		HealthGlobalVariable.circleBar.update(HealthGlobalVariable.value[0],
-				200, 0, aim[0]); // 将参数传递到Circlebar中
+				200, 0, HealthGlobalVariable.aim[0]); // 将参数传递到Circlebar中
+		text_view.setText("您当前运动" +HealthGlobalVariable.value[0] + "步");
 	}
 
 	public void energy_btn(View v) {
@@ -272,7 +353,8 @@ public class HealthServiceActivity extends Activity {
 		aqi_btn.setImageDrawable(getResources().getDrawable(
 				R.drawable.quality_normal));
 		HealthGlobalVariable.circleBar.update(HealthGlobalVariable.value[1],
-				200, 1, aim[1]); // 将参数传递到Circlebar中
+				200, 1, HealthGlobalVariable.aim[1]); // 将参数传递到Circlebar中
+		text_view.setText("您当前消耗能量" +HealthGlobalVariable.value[1] + "KCal");
 	}
 
 	public void aqi_btn(View v) {
@@ -283,13 +365,16 @@ public class HealthServiceActivity extends Activity {
 		aqi_btn.setImageDrawable(getResources().getDrawable(
 				R.drawable.quality_press));
 		HealthGlobalVariable.circleBar.update(HealthGlobalVariable.value[2],
-				200, 2, aim[2]); // 将参数传递到Circlebar中
+				200, 2, HealthGlobalVariable.aim[2]); // 将参数传递到Circlebar中
+		if (0 == HealthGlobalVariable.newAqi) {
+			text_view.setText("获取空气质量失败...");
+		}else {
+			
+			text_view.setText("当前AQI指数" +HealthGlobalVariable.value[2]);
+		}
 	}
 
-	public void to_navige_btn(View v) {
-		HealthGlobalVariable.mLeftMenu.toggle();
-	}
-
+	//左划菜单
 	public void toggleMenu(View view) {
 		HealthGlobalVariable.mLeftMenu.toggle();
 	}
@@ -317,8 +402,11 @@ public class HealthServiceActivity extends Activity {
 					int AQI = fechAQI();
 					if (AQI != 0) {
 						SensorData.setAQI(AQI);
+						time = 1000 * 600;// 从第二次以后，10分钟每获取一次!!
+					}else{
+						time = 1000 * 3;// 如果等于0，则三秒钟获取一次!!
 					}
-					time = 1000 * 600;// 从第二次以后，10分钟每获取一次!!
+					
 
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -334,17 +422,30 @@ public class HealthServiceActivity extends Activity {
 		Document doc = null;
 		try {
 			doc = Jsoup.connect(url).userAgent("Mozilla").timeout(8000).get();
+			Elements elems = doc.select("[class=op_pm25_graexp]");// class="op_pm25_graexp"
+			if (elems.size() == 0) {
+				System.out.println("###获取空气质量失败！");
+			} else {
+				AQI = elems.get(0).text();
+			}
 		} catch (IOException e) {
 			System.out.println("获取空气质量失败:" + e.getCause());
 
 		}
-		Elements elems = doc.select("[class=op_pm25_graexp]");// class="op_pm25_graexp"
-		if (elems.size() == 0) {
-			System.out.println("###获取空气质量失败！");
-		} else {
-			AQI = elems.get(0).text();
-		}
+
 		return Integer.valueOf(AQI);
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	/*
@@ -409,12 +510,13 @@ public class HealthServiceActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		voiceUtil = VoiceUtil.getInstance(HealthServiceActivity.this);//获取语音实例
+		
 		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		mPedometerSettings = new PedometerSettingUtil(mSettings);
 
 		voiceUtil.setSpeak(mSettings.getBoolean("speak",
-				SensorData.isOpenedVoice));
+				SensorData.isOpenedVoice()));
 
 		// Read from preferences if the service was running on the last onPause
 		mIsRunning = mPedometerSettings.isServiceRunning();
@@ -432,6 +534,12 @@ public class HealthServiceActivity extends Activity {
 
 		mIsMetric = SensorData.isMetric;
 
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
 	}
 
 	private StepService mService;
@@ -564,6 +672,7 @@ public class HealthServiceActivity extends Activity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
+			voiceUtil = VoiceUtil.getInstance(HealthServiceActivity.this);//获取语音实例
 			float second = (float) 0.1;// 秒钟数!!!
 			long time = (long) (1000 * second);
 			while (true) {
@@ -571,10 +680,9 @@ public class HealthServiceActivity extends Activity {
 					Thread.sleep(time);
 
 					if (voiceUtil.isSpeakingNow()) {
-						System.out
-								.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@----正在语音播报，暂停歌曲！！");
+						//System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@----正在语音播报，暂停歌曲！！");
 					} else {
-						System.out.println("&&&&&&=====语音播报结束，恢复唱歌歌曲！！");
+						//System.out.println("&&&&&&=====语音播报结束，恢复唱歌歌曲！！");
 					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -619,11 +727,13 @@ public class HealthServiceActivity extends Activity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
+			voiceUtil = VoiceUtil.getInstance(HealthServiceActivity.this);//获取语音实例
 			float second = (float) 0.08;// 秒钟数!!!
 			while (true) {
 				try {
 					Thread.sleep((long) (1000 * second));
 
+					voiceUtil.setSpeak(UserMessage_system.ISSPEAKEROPEN);//判断当前语音开关状态!!
 					if (SensorData.isFirst) {
 						Thread.sleep(3000);
 						// SensorData.setSpeaking(true);//开始语音播报!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -639,9 +749,9 @@ public class HealthServiceActivity extends Activity {
 						if (SensorData.getStepNum()
 								% SensorData.getSpeakHZ_StepNum() == 0) {
 							// voiceUtil.say("您已经走了"+SensorData.stepNum+"步");//测试!!!!
-							String message = "您已经走了" + SensorData.stepNum
-									+ "步，相当于" + SensorData.distance + "公里，"
-									+ "消耗了" + SensorData.energy + "卡路里！";
+							String message = "您已经走了" + SensorData.getStepNum()
+									+ "步，相当于" + SensorData.getDistance() + "公里，"
+									+ "消耗了" + SensorData.getEnergy() + "卡路里！";
 							System.out.println(message);
 							// SensorData.setSpeaking(true);//开始语音播报!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 							voiceUtil.say(message);// !!!~!!!!!!!!!!!!!!!!!!!
@@ -676,6 +786,32 @@ public class HealthServiceActivity extends Activity {
 		}
 	}
 
+	
+	//打开关闭语音功能:MonitoringControlSpeaking
+	public class MonitoringControlSpeaking implements Runnable {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			voiceUtil = VoiceUtil.getInstance(HealthServiceActivity.this);//获取语音实例
+			
+			float second = (float) 0.1;// 秒钟数!!!
+			long time = (long) (1000 * second);
+			while (true) {
+				try {
+					Thread.sleep(time);
+					
+					//#######################################
+					voiceUtil.setSpeak(UserMessage_system.ISSPEAKEROPEN);
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
 	// ##########################################################
 	/* 监测用户是否在运动 */
 	public class MonitoringAVGSpeed implements Runnable {
@@ -790,31 +926,76 @@ public class HealthServiceActivity extends Activity {
 			switch (msg.what) {
 			case STEPS_MSG:
 				mStepValue = (int) msg.arg1;
-				if (SensorData.getStepNum() == mStepValue) {// 如果步数没有发生变化，就判断当前没有运动!!!!!!!!!
+				if(mStepValue<0){
+					System.out.println("######无效步数!!!");
+				}
+				else if (SensorData.getStepNum_lastFetch() == mStepValue) {// 如果步数没有发生变化，就判断当前没有运动!!!!!!!!!
 					SensorData.isMoving = false;
-					SensorData.setSpeed(0);
-					SensorData.setMoveHZ(0);
+					//SensorData.setSpeed(0);
+					//SensorData.setMoveHZ(0);
+					System.out.println("######步数："+SensorData.getStepNum());
 				} else {
-					SensorData.setStepNum(mStepValue);
+					SensorData.setStepNum(SensorData.getStepNum()
+							+mStepValue-SensorData.getStepNum_lastFetch());
+					SensorData.setTotal_stepNum(SensorData.getTotal_stepNum()
+							+mStepValue-SensorData.getStepNum_lastFetch());//增加累计值
+					
+					SensorData.setStepNum_lastFetch(mStepValue);//同步步数
+					
+					if(SensorData.getStepNum()==SensorData.MARK_BASE_STEPNUM_LOW){
+						SportInfoDAO dao=new SportInfoDAO(HealthServiceActivity.this);
+						Cursor c=dao.query("select user_total_credits from "+SensorData.getUsername()
+								+" where user_date=(select max(user_date) from "+SensorData.getUsername()+")",
+								null);
+						while(c.moveToNext()){
+							SensorData.setTotalCredits(c.getInt(c.getColumnIndex("user_total_credits")));
+						}
+						/*加上现在的低积分*/
+						SensorData.setTotalCredits(SensorData.getTotalCredits()+SensorData.DAY_CREDITS_LOW);
+						/*更新数据库*/ 
+						ContentValues values=new  ContentValues();
+						values.put("user_total_credits", SensorData.getTotalCredits());
+						dao.update(SensorData.getUsername(), values, "user_date=?",
+								new String[]{CalculateUtil.GetNowTime()});
+					}else if(SensorData.getStepNum()==SensorData.MARK_BASE_STEPNUM_HIGH){
+						SportInfoDAO dao=new SportInfoDAO(HealthServiceActivity.this);
+						Cursor c=dao.query("select user_total_credits from "+SensorData.getUsername()
+								+" where user_date=(select max(user_date) from "+SensorData.getUsername()+")",
+								null);
+						while(c.moveToNext()){
+							SensorData.setTotalCredits(c.getInt(c.getColumnIndex("user_total_credits")));
+						}
+						/*先减去之前的低积分，加上现在的高积分*/
+						SensorData.setTotalCredits(SensorData.getTotalCredits()
+								-SensorData.DAY_CREDITS_LOW+SensorData.DAY_CREDITS_HIGH);
+						/*更新数据库*/ 
+						ContentValues values=new  ContentValues();
+						values.put("user_total_credits", SensorData.getTotalCredits());
+						dao.update(SensorData.getUsername(), values, "user_date=?",
+								new String[]{CalculateUtil.GetNowTime()});
+					}
+					
 					SensorData.isMoving = true;
 				}
 				if (0 == HealthGlobalVariable.model) {
 					HealthGlobalVariable.value[0] = (int) SensorData
 							.getStepNum();
 					HealthGlobalVariable.circleBar.update(
-							HealthGlobalVariable.value[0], 0, 0, aim[0]); // 将参数传递到Circlebar中
+							HealthGlobalVariable.value[0], 0, 0, HealthGlobalVariable.aim[0]); // 将参数传递到Circlebar中
+					text_view.setText("您当前运动" +HealthGlobalVariable.value[0] + "步");
 				}
-				if (2 == HealthGlobalVariable.model) {
-					HealthGlobalVariable.value[2] = (int) SensorData.getAQI();
-					HealthGlobalVariable.circleBar.update(
-							HealthGlobalVariable.value[2], 0, 2, aim[2]); // 将参数传递到Circlebar中
-				}
+				HealthGlobalVariable.newAqi = SensorData.getAQI();
+//				if (2 == HealthGlobalVariable.model) {
+//					HealthGlobalVariable.value[2] = (int) SensorData.getAQI();
+//					HealthGlobalVariable.circleBar.update(
+//							HealthGlobalVariable.value[2], 0, 2, aim[2]); // 将参数传递到Circlebar中
+//				}
 
 				System.out.println("######步数:" + SensorData.getStepNum());// 测试!!!!!!
 				break;
 			case PACE_MSG:
 				mPaceValue = msg.arg1;
-				if (mPaceValue <= 0) {
+				if (mPaceValue <=0) {
 					SensorData.setMoveHZ(0);
 					System.out.println("######步频:" + SensorData.getMoveHZ());// 测试!!!!!!
 				} else {
@@ -824,12 +1005,17 @@ public class HealthServiceActivity extends Activity {
 				break;
 			case DISTANCE_MSG:
 				mDistanceValue = ((int) msg.arg1) / 1000f;
-				if (mDistanceValue <= 0) {
-					SensorData.setDistance(0);
+				float temp_distance = getFormatFloat(mDistanceValue);
+				if(temp_distance<0){
+					System.out.println("######无效距离值!");
+				}
+				else if (SensorData.getDistance_lastFetch()==temp_distance) {
 					System.out.println("######距离:" + SensorData.getDistance());// 测试!!!!!!
 				} else {
-					float temp = getFormatFloat(mDistanceValue);
-					SensorData.setDistance(temp);
+					SensorData.setDistance(getFormatFloat(SensorData.getDistance()
+							+temp_distance-SensorData.getDistance_lastFetch()));//累计加和
+					SensorData.setDistance_lastFetch(temp_distance);//同步距离
+					
 					System.out.println("######距离:" + SensorData.getDistance());// 测试!!!!!!
 				}
 				break;
@@ -846,11 +1032,16 @@ public class HealthServiceActivity extends Activity {
 				break;
 			case CALORIES_MSG:
 				mCaloriesValue = msg.arg1;
-				if (mCaloriesValue <= 0) {
-					SensorData.setEnergy(0);
-					System.out.println("######kCal:" + SensorData.getEnergy());// 测试!!!!!!
+				if(mCaloriesValue<0){
+					System.out.println("#######无效能量值!!!");
+				}
+				else if (SensorData.getEnergy_lastFetch()==mCaloriesValue) {
+					System.out.println("######kCal:"+SensorData.getEnergy());// 测试!!!!!!
 				} else {
-					SensorData.setEnergy(mCaloriesValue);
+					SensorData.setEnergy(SensorData.getEnergy()
+							+mCaloriesValue-SensorData.getEnergy_lastFetch());
+					SensorData.setEnergy_lastFetch(mCaloriesValue);//同步能量
+					
 					System.out.println("######kCal:" + SensorData.getEnergy());// 测试!!!!!!
 				}
 				HealthGlobalVariable.value[1] = (int) SensorData.getEnergy();
@@ -877,28 +1068,50 @@ public class HealthServiceActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			exit();
 		}
 		return false;
 	}
 
 	private void exit() {
-        if(!isExit) {
-            isExit = true;
-            Toast.makeText(this, "在按一次退出程序", Toast.LENGTH_SHORT).show();
-            new Timer().schedule(new TimerTask() {
-                
-                @Override
-                public void run() {
-                    isExit = false;
-                }
-            }, 2000);
-        } else {
-            finish();
-        }
-    }
-	
-	
+		if (!isExit) {
+			isExit = true;
+			Toast.makeText(this, "在按一次退出程序", Toast.LENGTH_SHORT).show();
+			new Timer().schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					isExit = false;
+				}
+			}, 2000);
+		} else {
+			finish();
+		}
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
 
 }

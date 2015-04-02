@@ -13,9 +13,9 @@
         <ImageButton
             android:id="@+id/ibtn_player_list"
             android:layout_width="60dp"
-            android:layout_height="24dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="13dp"
+            android:layout_centerVertical="true"
             android:contentDescription="@string/image_description"
             android:background="@drawable/back" />
 

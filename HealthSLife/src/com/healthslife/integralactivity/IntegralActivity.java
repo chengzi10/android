@@ -6,13 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.healthslife.R;
 
 public class IntegralActivity extends FragmentActivity{
+	
+	private ImageView return_btn;
 	private ViewPager viewPager;
 
 	private RadioGroup radioGroup;
@@ -26,6 +31,14 @@ public class IntegralActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		return_btn = (ImageView) findViewById(R.id.return_btn);
+		return_btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		initData();
 		initView();
 	}

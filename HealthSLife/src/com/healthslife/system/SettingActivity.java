@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.healthslife.R;
 import com.healthslife.health.HealthServiceActivity;
@@ -46,6 +47,7 @@ public class SettingActivity extends Activity implements SlideListener{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.setting_activity_layout);
+		//获取参数
 		UserMessage_system.setParameters(this);
 		//获取播报频率的textview
 		sequencesetting = (TextView)findViewById(R.id.sequence_textview);
@@ -53,7 +55,19 @@ public class SettingActivity extends Activity implements SlideListener{
 		//给开关设监听器
 		SlideSwitch slide = (SlideSwitch)findViewById(R.id.sequence_swit);
 		slide.setSlideListener(this);
-		
+		//设置开关初始状态
+		slide.moveToDest(UserMessage_system.ISSPEAKEROPEN);
+		//点击跳出简介界面
+		TextView summaryTextView = (TextView)findViewById(R.id.summary_textview);
+		summaryTextView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent it = new Intent(SettingActivity.this,SummaryActivity.class);
+				startActivity(it);
+			}
+		});
 		//点击跳出音乐设置界面
 		TextView musicsettingTextView = (TextView)findViewById(R.id.music_setting_textview);
 		musicsettingTextView.setOnClickListener(new OnClickListener() {
@@ -111,15 +125,22 @@ public class SettingActivity extends Activity implements SlideListener{
 				startActivity(it);
 			}
 		});
-		
+		//TextView 版本更新
+		TextView hasnew = (TextView)findViewById(R.id.hasnew);
+		hasnew.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(SettingActivity.this, "你使用的纯动是最新版本！", Toast.LENGTH_LONG).show();;
+			}
+		});
 		ImageView backImageView = (ImageView)findViewById(R.id.backimage_in_settingactivity);
 		backImageView.setOnClickListener(new OnClickListener() {
 					
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(SettingActivity.this , HealthServiceActivity.class);
-				startActivity(intent);
 				SettingActivity.this.finish();
 			}
 		});
@@ -136,6 +157,8 @@ public class SettingActivity extends Activity implements SlideListener{
 	@Override
 	public void open() {
 		// TODO Auto-generated method stub
+		UserMessage_system.setIsspeakeropen(this, true);
+		UserMessage_system.setParameters(SettingActivity.this);
 		sequencesetting.setClickable(true);
 		sequencesetting.setTextColor(Color.rgb(0, 0, 0));
 		sequencesetting.invalidate();
@@ -144,6 +167,8 @@ public class SettingActivity extends Activity implements SlideListener{
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
+		UserMessage_system.setIsspeakeropen(this, false);
+		UserMessage_system.setParameters(SettingActivity.this);
 		sequencesetting.setClickable(false);
 		sequencesetting.setTextColor(Color.rgb(239, 239, 244));
 		sequencesetting.invalidate();

@@ -25,17 +25,24 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	// 创建一个包含所有实体类数据的表的sql语句
 
 	/* 用户信息表：user_info */
+	public static final String CREATE_MAP_TABLE_SQL = "CREATE TABLE IF NOT EXISTS "
+			+ SportInfoDAO.TABLENAME_UserMap
+			+ "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
+			+ "longitude varchar(30),latitude varchar(30))";
+	/* 用户信息表：user_info */
 	public static final String CREATE_INFO_TABLE_SQL = "CREATE TABLE IF NOT EXISTS "
 			+ SportInfoDAO.TABLENAME_UserInfo
 			+ "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
 			+ "user_name varchar(20),user_sex int,user_weight int,user_high int,user_aimstep int,"
 			+ "user_islogin int)";
 	/* 用户健康数据信息表：（用户名为表名）====用户退出该APP时，需要删除该表 */
-	public static String CREATE_SPROTDATA_TABLE_SQL = "CREATE TABLE IF NOT EXISTS "
-			+ SportInfoDAO.TABLENAME_UserSportData
-			+ "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
+	public static final String CREATE_SPROTDATA_TABLE_SQL_head = "CREATE TABLE IF NOT EXISTS ";
+	public static final String CREATE_SPROTDATA_TABLE_SQL_tail = 
+			"(id INTEGER PRIMARY KEY AUTOINCREMENT,"
 			+ "user_date varchar(20),user_step int,user_distance float,user_energy int, user_total_step int,"
 			+ "user_total_credits int,user_isupload int)";
+	
+			
 
 	/*
 	 * int uid; //APP的uid private boolean flag; //ture表示“系统APP”，false表示“用户APP”.
@@ -76,6 +83,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 		super.onOpen(db);
 	}
 	
+	
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
@@ -83,9 +92,11 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	}
 	
 	void createTable(SQLiteDatabase db){
-		SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();//创建表之前，获取用户名!!
+		//SportInfoDAO.TABLENAME_UserSportData=SensorData.getUsername();//创建表之前，获取用户名!!
 		db.execSQL(CREATE_INFO_TABLE_SQL);// 用户信息表：user_info
-		db.execSQL(CREATE_SPROTDATA_TABLE_SQL);// 用户健康数据信息表：（用户名为表名）
+		db.execSQL(CREATE_SPROTDATA_TABLE_SQL_head+SensorData.getUsername()
+				+CREATE_SPROTDATA_TABLE_SQL_tail);// 用户健康数据信息表：（用户名为表名）
+		db.execSQL(CREATE_MAP_TABLE_SQL);//用户运动轨迹表
 	}
 
 }

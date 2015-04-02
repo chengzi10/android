@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.ExpandableListActivity;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -26,6 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.healthslife.R;
+import com.healthslife.music.dao.DBData;
+import com.healthslife.music.dao.DBHpler;
+import com.healthslife.music.service.MediaPlayerManager;
 
 public class Music_Setting_Activity_system extends ExpandableListActivity {
 	
@@ -42,7 +48,8 @@ public class Music_Setting_Activity_system extends ExpandableListActivity {
 		// TODO Auto-generated method stub
 		if(0 == childPosition){
 			if(playingGroup != groupPosition){//如果没有正在播放某组音乐，点击了该组播放按钮
-				v.invalidate();//fixed
+				startService(new Intent(MediaPlayerManager.SERVICE_ACTION)
+				.putExtra("flag", MediaPlayerManager.SERVICE_MUSIC_PAUSE));
 				try {
 					player.reset();
 					player.setDataSource(MusicMessage_system.path[groupPosition]);
@@ -62,9 +69,7 @@ public class Music_Setting_Activity_system extends ExpandableListActivity {
 					e.printStackTrace();
 				}
 				playingGroup = groupPosition;
-				v.invalidate();//fixed
 			}else{
-				v.invalidate();//fixed
 				player.stop();
 				playingGroup = -1;
 			}
@@ -89,15 +94,33 @@ public class Music_Setting_Activity_system extends ExpandableListActivity {
 			default:
 				break;
 			}
-			MusicMessage_system.setLevel(this, groupPosition,MusicMessage_system.id[groupPosition],childPosition);
+			MusicMessage_system.setLevel(this, groupPosition,MusicMessage_system.path[groupPosition],childPosition);
 			Toast toast = Toast.makeText(this,
 					"设置 " + MusicMessage_system.titles[groupPosition] +" 为 " + l, 
 					Toast.LENGTH_LONG);
+			
+			/*更新歌曲等级*/
+			int result= updateLevel(childPosition,groupPosition);
+			System.out.println("设置结果："+result);
+			
 			toast.show();
 			parent.collapseGroup(groupPosition);
 		}
 		return false;
 	}
+	
+	/*更新歌曲等级*/
+	public int updateLevel(int level,int index){
+		DBHpler dbhpler=new DBHpler(Music_Setting_Activity_system.this);
+		SQLiteDatabase db= dbhpler.getWritableDatabase();
+		ContentValues values=new ContentValues();
+		values.put("level", level);
+		int result=db.update(DBData.SONG_TABLENAME, values, "filePath=?", 
+				new String[]{MusicMessage_system.path[index]});
+		
+		return result;
+	}
+	
 	
 	@Override
 	public void onGroupCollapse(int groupPosition) {
@@ -321,7 +344,13 @@ public class Music_Setting_Activity_system extends ExpandableListActivity {
 			int count = 0;
 			for(int i = 0;i < getExpandableListAdapter().getGroupCount();i++){
 				if(groups.get(i).isChecked()){
-					MusicMessage_system.setLevel(Music_Setting_Activity_system.this, i, MusicMessage_system.id[i], setting_level);
+					MusicMessage_system.setLevel(Music_Setting_Activity_system.this,
+							i, MusicMessage_system.path[i], setting_level);
+					
+					/*更新歌曲等级*/
+					int result=updateLevel(setting_level,i);
+					System.out.println("批量设置结果："+result);
+					
 					groups.get(i).toggle();
 					count++;
 				}
